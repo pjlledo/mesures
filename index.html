@@ -194,6 +194,9 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent);outline:none;
 @media (max-width:640px){ .medida .grid{grid-template-columns:1fr 1fr} .medida .val{grid-column:1/-1} }
 .desc-head{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}
 .full>textarea{display:block;width:100%;margin-top:6px}
+.chk{display:flex;align-items:center;gap:8px;margin-top:8px;font-size:13.5px;font-weight:500;cursor:pointer;width:max-content}
+.chk input{width:18px;height:18px;margin:0;accent-color:var(--accent);cursor:pointer}
+input[type=date]:disabled{opacity:.4;cursor:not-allowed}
 
 /* ---------- Exportar ---------- */
 table.res{width:100%;border-collapse:collapse;font-size:15px}
@@ -756,8 +759,8 @@ window.I18N = {
     elegidas: n => `${n} elegida${n === 1 ? "" : "s"}`,
 
     detallesH: "Detalles de las medidas elegidas",
-    detallesLead: "Al escribir una fecha en una medida se copia automáticamente a las demás medidas elegidas que aún no tengan una fecha propia.",
-    fFi: "Fecha de inicio", fFf: "Fecha de fin", fDesc: "Descripción de la medida", fVal: "Valoración", fRes: "Resultados",
+    detallesLead: "Al escribir una fecha en una medida se copia automáticamente a las demás medidas elegidas que aún no tengan una fecha propia. Marca «Sin fecha de fin» en las medidas que no la tengan: no recibirán la fecha copiada.",
+    fFi: "Fecha de inicio", fFf: "Fecha de fin", sinFin: "Sin fecha de fin", fDesc: "Descripción de la medida", fVal: "Valoración", fRes: "Resultados",
     phDesc: "Qué se hace, quién lo hace, cuándo y con qué frecuencia…",
     phRes: "Evidencias de progreso y propuestas de mejora…",
     usarEjemplo: "Usar el ejemplo como base", sinValorar: "— Sin valorar —", quitar: "Quitar",
@@ -818,8 +821,8 @@ window.I18N = {
     elegidas: n => `${n} triada${n === 1 ? "" : "es"}`,
 
     detallesH: "Detalls de les mesures triades",
-    detallesLead: "En escriure una data en una mesura, es copia automàticament a la resta de mesures triades que encara no tinguen una data pròpia.",
-    fFi: "Data d'inici", fFf: "Data de fi", fDesc: "Descripció de la mesura", fVal: "Valoració", fRes: "Resultats",
+    detallesLead: "En escriure una data en una mesura, es copia automàticament a la resta de mesures triades que encara no tinguen una data pròpia. Marca «Sense data de fi» en les mesures que no en tinguen: no rebran la data copiada.",
+    fFi: "Data d'inici", fFf: "Data de fi", sinFin: "Sense data de fi", fDesc: "Descripció de la mesura", fVal: "Valoració", fRes: "Resultats",
     phDesc: "Què es fa, qui ho fa, quan i amb quina freqüència…",
     phRes: "Evidències de progrés i propostes de millora…",
     usarEjemplo: "Usa l'exemple com a base", sinValorar: "— Sense valorar —", quitar: "Lleva",
@@ -2034,7 +2037,9 @@ window.XLSXIO = (function () {
           if (m) otros = m[2].trim();
         }
         const fi = fecha(h["F" + r]), ff = fecha(h["G" + r]);
-        estado.sel[n.id] = {fi, ff, desc: txt(h["H" + r]), val: valor(h["I" + r]), res: txt(h["J" + r]), otros, src: {fi: null, ff: null}};
+        estado.sel[n.id] = {fi, ff, desc: txt(h["H" + r]), val: valor(h["I" + r]), res: txt(h["J" + r]), otros, src: {fi: null, ff: null},
+          // Aplicada con fecha de inicio y sin fecha de fin: se conserva así al reabrir.
+          sinFin: !!fi && !ff};
         if (fi && !estado.ultima.fi) estado.ultima.fi = fi;
         if (ff && !estado.ultima.ff) estado.ultima.ff = ff;
       }
@@ -2122,7 +2127,8 @@ window.PDFGEN = (function () {
           if (n.otros && s.otros.trim()) nombre = (va ? "Altres: " : "Otros: ") + s.otros.trim();
           const padre = n.padres.length ? n.padres[n.padres.length - 1] : null;
           const medida = padre ? `${etq(padre)} > ${nombre}` : (n.nivel === "III" && n.num && n.num !== "—" ? `${n.num}. ${nombre}` : nombre);
-          body.push([lat(medida), fmt(s.fi), fmt(s.ff), lat(s.desc), lat(s.val ? VAL[s.val] : ""), lat(s.res)]);
+          const fin = s.sinFin ? {content: lat(T.sinFin), styles: {fontStyle: "italic", textColor: GRIS}} : fmt(s.ff);
+          body.push([lat(medida), fmt(s.fi), fin, lat(s.desc), lat(s.val ? VAL[s.val] : ""), lat(s.res)]);
         }
       }
       if (!body.length) continue;
@@ -2271,6 +2277,8 @@ window.PDFGEN = (function () {
       if (!M.byId[id] || M.byId[id].tipo !== "item") continue;
       sel[id] = Object.assign({fi: "", ff: "", desc: "", val: "", res: "", otros: ""}, v);
       sel[id].src = Object.assign({fi: null, ff: null}, v.src || {});
+      sel[id].sinFin = !!sel[id].sinFin;
+      if (sel[id].sinFin) sel[id].ff = "";
       delete sel[id].auto;
     }
     s.sel = sel;
@@ -2304,7 +2312,7 @@ window.PDFGEN = (function () {
   function seleccionar(id, on) {
     if (on) {
       if (S.sel[id]) return;
-      S.sel[id] = UI.papelera[id] || {fi: S.ultima.fi, ff: S.ultima.ff, desc: "", val: "", res: "", otros: "",
+      S.sel[id] = UI.papelera[id] || {fi: S.ultima.fi, ff: S.ultima.ff, desc: "", val: "", res: "", otros: "", sinFin: false,
         src: {fi: S.ultima.fi ? S.ultima.src.fi : null, ff: S.ultima.ff ? S.ultima.src.ff : null}};
       delete UI.papelera[id];
     } else if (S.sel[id]) {
@@ -2534,7 +2542,8 @@ window.PDFGEN = (function () {
       <div class="grid">
         ${n.otros ? `<label class="f full">${esc(t("phOtros"))}<input type="text" data-f="otros" value="${esc(s.otros)}"><span class="hint warn" data-w="otros" hidden>${esc(t("wOtros"))}</span></label>` : ""}
         <label class="f">${esc(t("fFi"))}<input type="date" data-f="fi" value="${esc(s.fi)}" min="2000-01-01" max="2100-12-31"></label>
-        <label class="f">${esc(t("fFf"))}<input type="date" data-f="ff" value="${esc(s.ff)}" min="2000-01-01" max="2100-12-31"></label>
+        <div class="f-ff"><label class="f">${esc(t("fFf"))}<input type="date" data-f="ff" value="${esc(s.ff)}" min="2000-01-01" max="2100-12-31"${s.sinFin ? " disabled" : ""}></label>
+          <label class="chk"><input type="checkbox" data-f="sinFin"${s.sinFin ? " checked" : ""}>${esc(t("sinFin"))}</label></div>
         <label class="f val">${esc(t("fVal"))}<select data-f="val">
           <option value="">${esc(t("sinValorar"))}</option>
           ${window.VALORACIONES.map(v => `<option value="${v.k}" ${s.val === v.k ? "selected" : ""}>${esc(v[P.lang])}</option>`).join("")}
@@ -2581,13 +2590,15 @@ window.PDFGEN = (function () {
     const v = s[campo], cambios = [];
     for (const [oid, o] of Object.entries(S.sel)) {
       if (oid === id || o[campo] === v) continue;
+      if (campo === "ff" && o.sinFin) continue;   // marcada «Sin fecha de fin»: no se toca
       if (!o[campo] || o.src[campo] === id) {
         cambios.push([oid, o[campo], o.src[campo]]);
         o[campo] = v; o.src[campo] = id;
       }
     }
-    S.ultima[campo] = v;
-    S.ultima.src[campo] = id;
+    // La fecha «común» (para medidas nuevas o al desmarcar «Sin fecha de fin») solo cambia si esta
+    // medida es la que reparte la fecha; una fecha personalizada en otra medida no la sustituye.
+    if (cambios.length || !S.ultima[campo] || S.ultima.src[campo] === id) { S.ultima[campo] = v; S.ultima.src[campo] = id; }
     guardar();
     if (!cambios.length) return;
     refrescarFechas(cambios.map(c => c[0]), campo);
@@ -2597,6 +2608,19 @@ window.PDFGEN = (function () {
       refrescarFechas(cambios.map(c => c[0]), campo);
     });
   }
+  /* «Sin fecha de fin»: vacía la fecha y la bloquea; al desmarcar se propone la última fecha copiada. */
+  function marcarSinFin(card, on) {
+    flushFecha();
+    const id = card.dataset.id, s = S.sel[id], inp = $("[data-f=ff]", card);
+    s.sinFin = on;
+    if (on) { s.ff = ""; s.src.ff = null; }
+    else if (!s.ff && S.ultima.ff) { s.ff = S.ultima.ff; s.src.ff = S.ultima.src.ff; }
+    inp.value = s.ff;
+    inp.disabled = on;
+    guardar();
+    avisos(card);
+  }
+
   function refrescarFechas(ids, campo) {
     for (const oid of ids) {
       const card = $(`.medida[data-id="${oid}"]`);
@@ -2821,6 +2845,7 @@ window.PDFGEN = (function () {
   vista.addEventListener("change", e => {
     const el = e.target;
     if (el.dataset.act === "toggle") return toggleEnLista(el.closest(".item"), el.checked);
+    if (el.dataset.f === "sinFin") return marcarSinFin(el.closest(".medida"), el.checked);
     if (el.dataset.f === "val") {
       const card = el.closest(".medida");
       S.sel[card.dataset.id].val = el.value; guardar();
@@ -2844,7 +2869,7 @@ window.PDFGEN = (function () {
       return guardar();
     }
     const card = el.closest(".medida");
-    if (!card || !el.dataset.f) return;
+    if (!card || !el.dataset.f || el.type === "checkbox") return;
     const id = card.dataset.id, f = el.dataset.f;
     if (f === "fi" || f === "ff") fechaCambiada(id, f, el.value);
     else { S.sel[id][f] = el.value; guardar(); }

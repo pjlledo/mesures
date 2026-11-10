@@ -19,6 +19,7 @@ Se eligen las medidas de la lista de ITACA 3, se completan sus fechas, descripci
 2. **Nivel II** y **Nivel III**: se marcan las medidas que se aplican. Cada medida tiene un botón **i** con una explicación y un ejemplo práctico en el aula. Hay buscador y filtros (todas, elegidas, sugeridas). En las medidas «Otros» se escribe en qué consisten.
 3. **Detalles**: fecha de inicio y de fin, descripción, valoración y resultados de cada medida.
    - Al escribir una fecha en una medida se copia automáticamente a las demás medidas elegidas que no tienen fecha. Si luego se cambia la fecha de esa misma medida, las copias se actualizan; las fechas cambiadas a mano en otras medidas se respetan. Siempre se puede deshacer.
+   - Las medidas que no tienen fecha de fin se marcan con «Sin fecha de fin»: no reciben la fecha copiada, en el Excel la celda queda vacía y en el PDF se indica.
    - «Usar el ejemplo como base» rellena la descripción con el ejemplo de la medida para adaptarlo.
 4. **Exportar**: resumen por bloques, avisos (falta el nombre, medidas sin fecha…) y descarga del Excel y del PDF.
 
