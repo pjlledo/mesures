@@ -16,8 +16,9 @@ Se eligen las medidas de la lista de ITACA 3, se completan sus fechas, descripci
 ## Cómo se usa
 
 1. **Alumno/a**: nombre, curso, grupo, curso escolar y tutor/a. Opcionalmente, uno o varios perfiles (TDAH, TEA, dificultades de aprendizaje, recién llegado, absentismo, diversidad funcional…): la aplicación resalta las medidas habituales para ese perfil y un botón las premarca.
-2. **Nivel II** y **Nivel III**: se marcan las medidas que se aplican. Cada medida tiene un botón **i** con una explicación y un ejemplo práctico en el aula. Hay buscador y filtros (todas, elegidas, sugeridas). En las medidas «Otros» se escribe en qué consisten.
+2. **Nivel II** y **Nivel III**: se marcan las medidas que se aplican. Cada medida tiene un botón **i** con una explicación y un ejemplo de aplicación, válido para cualquier etapa. Hay buscador y filtros (todas, elegidas, sugeridas). En las medidas «Otros» se escribe en qué consisten.
 3. **Detalles**: fecha de inicio y de fin, descripción, valoración y resultados de cada medida.
+   - La fecha de inicio tiene accesos rápidos a **inicio de curso**, **2.º trimestre** y **3.er trimestre**, con las fechas del calendario escolar oficial del curso indicado (para 2026-2027, Resolución de 15 de junio de 2026: 9/9/2026 —14/9/2026 en FPA—, 7/1/2027 y 6/4/2027).
    - Al escribir una fecha en una medida se copia automáticamente a las demás medidas elegidas que no tienen fecha. Si luego se cambia la fecha de esa misma medida, las copias se actualizan; las fechas cambiadas a mano en otras medidas se respetan. Siempre se puede deshacer.
    - Las medidas que no tienen fecha de fin se marcan con «Sin fecha de fin»: no reciben la fecha copiada, en el Excel la celda queda vacía y en el PDF se indica.
    - «Usar el ejemplo como base» rellena la descripción con el ejemplo de la medida para adaptarlo.

@@ -194,6 +194,13 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent);outline:none;
 @media (max-width:640px){ .medida .grid{grid-template-columns:1fr 1fr} .medida .val{grid-column:1/-1} }
 .desc-head{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}
 .full>textarea{display:block;width:100%;margin-top:6px}
+.atajos{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.atajo{border:1px solid var(--border);background:var(--surface);border-radius:999px;padding:3px 10px;min-height:30px;font-size:12.5px;font-weight:600;color:var(--text)}
+.atajo .fch{color:var(--muted);font-weight:500}
+.atajo:hover{border-color:var(--accent)}
+.atajo[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+.atajo[aria-pressed="true"] .fch{color:var(--accent)}
+.hint.cal{margin:-8px 0 14px;max-width:80ch}
 .chk{display:flex;align-items:center;gap:8px;margin-top:8px;font-size:13.5px;font-weight:500;cursor:pointer;width:max-content}
 .chk input{width:18px;height:18px;margin:0;accent-color:var(--accent);cursor:pointer}
 input[type=date]:disabled{opacity:.4;cursor:not-allowed}
@@ -240,7 +247,8 @@ dialog::backdrop{background:rgba(10,14,25,.5)}
 .toast{position:fixed;left:50%;bottom:86px;transform:translateX(-50%) translateY(20px);z-index:30;display:flex;align-items:center;gap:14px;background:var(--text);color:var(--bg);padding:10px 12px 10px 16px;border-radius:12px;box-shadow:var(--shadow);font-size:14.5px;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;max-width:calc(100vw - 24px)}
 .toast.show{opacity:1;transform:translateX(-50%);pointer-events:auto}
 .toast button{border:0;background:transparent;color:inherit;font-weight:800;text-decoration:underline;text-underline-offset:3px;padding:4px}
-footer.pie{font-size:12.5px;color:var(--muted);text-align:center;padding:26px 0 0}
+footer.pie{font-size:12.5px;color:var(--muted);text-align:center;padding:26px 0 0;border-top:1px solid var(--border);margin-top:28px}
+footer.pie p{margin:0 0 4px}
 footer.pie a{color:var(--accent);text-underline-offset:2px}
 
 </style>
@@ -777,7 +785,7 @@ window.I18N = {
     dExcel: "Descargar Excel", dPdf: "Descargar PDF", generando: "Generando…",
     rgpd: "Documento con datos personales de alumnado: custodiar conforme al RGPD y la LOPDGDD (uso interno del centro).",
 
-    qEs: "Qué es", ejemplo: "Ejemplo en el aula", formaParte: "Forma parte de", sugeridaPara: "Sugerida para", valorarEn: "A valorar en",
+    qEs: "Qué es", ejemplo: "Ejemplo de aplicación", formaParte: "Forma parte de", sugeridaPara: "Sugerida para", valorarEn: "A valorar en",
     elegir: "Elegir esta medida", quitarSel: "Quitar de la selección", cerrar: "Cerrar",
     otrosX: "Cualquier otra medida de este apartado que se aplique y no figure en la lista. Al elegirla, escribe en qué consiste: el texto aparecerá en el Excel y en el PDF.",
 
@@ -788,6 +796,14 @@ window.I18N = {
     recuperado: "Borrador recuperado", nuevoOk: "Formulario vacío para un nuevo alumno/a",
     errExport: "No se ha podido generar el archivo.",
     pie: "Funciona sin conexión · los datos no salen del dispositivo",
+    lic: "Licencia", codigo: "Código en GitHub",
+    atIni: "Inicio de curso", atT2: "2.º trimestre", atT3: "3.er trimestre", atAria: "Fecha de inicio rápida",
+    atTitIni: "Primer día lectivo del curso",
+    atTitT2: "Inicio del 2.º trimestre: primer día lectivo tras las vacaciones de Navidad",
+    atTitT3: "Inicio del 3.er trimestre: primer día lectivo tras las vacaciones de Pascua",
+    calNota: (fuente, ini, t2, t3, extra) => `Accesos rápidos de fecha de inicio según la ${fuente}: inicio de curso ${ini}${extra}, 2.º trimestre ${t2} (tras Navidad) y 3.er trimestre ${t3} (tras Pascua). Los festivos locales de tu municipio pueden variar.`,
+    calFpa: f => ` (${f} en Formación de Personas Adultas)`,
+    calNoDisp: c => `No hay calendario oficial cargado para el curso «${c}»: los accesos rápidos de fecha de inicio están disponibles para el curso 2026-2027.`,
     otrosPref: "Otros: "
   },
   va: {
@@ -839,7 +855,7 @@ window.I18N = {
     dExcel: "Baixa l'Excel", dPdf: "Baixa el PDF", generando: "S'està generant…",
     rgpd: "Document amb dades personals d'alumnat: custodiar d'acord amb el RGPD i la LOPDGDD (ús intern del centre).",
 
-    qEs: "Què és", ejemplo: "Exemple a l'aula", formaParte: "Forma part de", sugeridaPara: "Suggerida per a", valorarEn: "Per valorar en",
+    qEs: "Què és", ejemplo: "Exemple d'aplicació", formaParte: "Forma part de", sugeridaPara: "Suggerida per a", valorarEn: "Per valorar en",
     elegir: "Tria aquesta mesura", quitarSel: "Lleva-la de la selecció", cerrar: "Tanca",
     otrosX: "Qualsevol altra mesura d'aquest apartat que s'aplique i que no figure en la llista. En triar-la, escriu en què consisteix: el text apareixerà en l'Excel i en el PDF.",
 
@@ -850,6 +866,14 @@ window.I18N = {
     recuperado: "Esborrany recuperat", nuevoOk: "Formulari buit per a un nou alumne/a",
     errExport: "No s'ha pogut generar el fitxer.",
     pie: "Funciona sense connexió · les dades no ixen del dispositiu",
+    lic: "Llicència", codigo: "Codi a GitHub",
+    atIni: "Inici de curs", atT2: "2n trimestre", atT3: "3r trimestre", atAria: "Data d'inici ràpida",
+    atTitIni: "Primer dia lectiu del curs",
+    atTitT2: "Inici del 2n trimestre: primer dia lectiu després de les vacances de Nadal",
+    atTitT3: "Inici del 3r trimestre: primer dia lectiu després de les vacances de Pasqua",
+    calNota: (fuente, ini, t2, t3, extra) => `Accessos ràpids de data d'inici segons la ${fuente}: inici de curs ${ini}${extra}, 2n trimestre ${t2} (després de Nadal) i 3r trimestre ${t3} (després de Pasqua). Els festius locals del teu municipi poden variar.`,
+    calFpa: f => ` (${f} en Formació de Persones Adultes)`,
+    calNoDisp: c => `No hi ha calendari oficial carregat per al curs «${c}»: els accessos ràpids de data d'inici estan disponibles per al curs 2026-2027.`,
     otrosPref: "Altres: "
   }
 };
@@ -958,235 +982,147 @@ window.NORMATIVA = {
 <script>
 /* Textos de las medidas de NIVEL II (hoja «Nivel II» de la plantilla).
    Clave = "II.<fila del Excel>".  va = rótulo en valenciano.
-   x = [explicación es, explicación va]   e = [ejemplo es, ejemplo va]
+   x = [explicación es, explicación va]   (los ejemplos están en ejemplos-n2.js)
    El rótulo en castellano se lee directamente de la plantilla Excel. */
 window.TEXTOS = Object.assign(window.TEXTOS || {}, {
   /* ---------- MEDIDAS DE ACCESO ---------- */
   "II.7": {va: "Accessibilitat personalitzada amb mitjans comuns. Adequació de materials.",
     x: ["Ajustar los materiales y recursos que usa todo el grupo (tamaño de letra, formato, apoyos visuales, ubicación) para que cualquier alumno/a pueda acceder a ellos sin recursos especiales.",
-        "Ajustar els materials i recursos que usa tot el grup (grandària de lletra, format, suports visuals, ubicació) perquè qualsevol alumne/a hi puga accedir sense recursos especials."],
-    e: ["Las fichas de la unidad se editan con letra de 14 pt, interlineado amplio y enunciados con pictogramas; también se ofrecen en versión digital para ampliarlas en la tableta.",
-        "Les fitxes de la unitat s'editen amb lletra de 14 pt, interlineat ampli i enunciats amb pictogrames; també s'ofereixen en versió digital per a ampliar-les en la tauleta."]},
+        "Ajustar els materials i recursos que usa tot el grup (grandària de lletra, format, suports visuals, ubicació) perquè qualsevol alumne/a hi puga accedir sense recursos especials."]},
   "II.8": {va: "Utilització de diferents agrupaments.",
     x: ["Alternar gran grupo, pequeños grupos heterogéneos, parejas y trabajo individual según la tarea, para que el alumno/a reciba ayuda de sus iguales y participe con distintos roles.",
-        "Alternar gran grup, grups reduïts heterogenis, parelles i treball individual segons la tasca, perquè l'alumne/a reba ajuda dels seus iguals i participe amb diferents rols."],
-    e: ["En Matemáticas, la explicación se hace en gran grupo, la práctica en parejas (con un compañero/a tutor) y el reto final en equipos de cuatro.",
-        "En Matemàtiques, l'explicació es fa en gran grup, la pràctica en parelles (amb un company/a tutor) i el repte final en equips de quatre."]},
+        "Alternar gran grup, grups reduïts heterogenis, parelles i treball individual segons la tasca, perquè l'alumne/a reba ajuda dels seus iguals i participe amb diferents rols."]},
   "II.9": {va: "Contingut relacionat amb el context i les experiències prèvies.",
     x: ["Conectar los aprendizajes con la vida cotidiana, el entorno y lo que el alumnado ya sabe, para dar significado y funcionalidad a las tareas.",
-        "Connectar els aprenentatges amb la vida quotidiana, l'entorn i allò que l'alumnat ja sap, per a donar significat i funcionalitat a les tasques."],
-    e: ["Antes de trabajar las medidas de longitud, la clase mide el patio y su propia altura; los problemas usan precios reales del mercado del barrio.",
-        "Abans de treballar les mesures de longitud, la classe mesura el pati i la seua pròpia altura; els problemes usen preus reals del mercat del barri."]},
+        "Connectar els aprenentatges amb la vida quotidiana, l'entorn i allò que l'alumnat ja sap, per a donar significat i funcionalitat a les tasques."]},
   "II.10": {va: "Racons o ambients d'aprenentatge.",
     x: ["Organizar el aula en espacios con materiales y propuestas diferenciadas por los que el alumnado rota, lo que permite distintos ritmos, niveles y formas de aprender.",
-        "Organitzar l'aula en espais amb materials i propostes diferenciades per on l'alumnat rota, cosa que permet diferents ritmes, nivells i maneres d'aprendre."],
-    e: ["Rincón de lectura, de lógica-matemática, de experimentos y de juego simbólico; cada rincón tiene una tarjeta de instrucciones con imágenes y dos niveles de reto.",
-        "Racó de lectura, de lògica-matemàtica, d'experiments i de joc simbòlic; cada racó té una targeta d'instruccions amb imatges i dos nivells de repte."]},
+        "Organitzar l'aula en espais amb materials i propostes diferenciades per on l'alumnat rota, cosa que permet diferents ritmes, nivells i maneres d'aprendre."]},
   "II.11": {va: "Múltiples formes de presentació de la informació (DUA).",
     x: ["Aplicar el Diseño Universal para el Aprendizaje presentando la información por varios canales (oral, escrito, visual, manipulativo, audiovisual) para que nadie quede fuera por la forma de acceso.",
-        "Aplicar el Disseny Universal per a l'Aprenentatge presentant la informació per diversos canals (oral, escrit, visual, manipulatiu, audiovisual) perquè ningú quede fora per la forma d'accés."],
-    e: ["El ciclo del agua se presenta con un vídeo subtitulado, un esquema visual en la pizarra, una lectura breve y una maqueta que el alumnado manipula.",
-        "El cicle de l'aigua es presenta amb un vídeo subtitulat, un esquema visual en la pissarra, una lectura breu i una maqueta que l'alumnat manipula."]},
+        "Aplicar el Disseny Universal per a l'Aprenentatge presentant la informació per diversos canals (oral, escrit, visual, manipulatiu, audiovisual) perquè ningú quede fora per la forma d'accés."]},
   "II.12": {va: "Ús de formats digitals, apps,...",
     x: ["Incorporar recursos digitales (libros digitales, aplicaciones, lectores de texto, presentaciones interactivas) que facilitan el acceso, la práctica autónoma y la expresión de lo aprendido.",
-        "Incorporar recursos digitals (llibres digitals, aplicacions, lectors de text, presentacions interactives) que faciliten l'accés, la pràctica autònoma i l'expressió del que s'ha aprés."],
-    e: ["El alumnado puede escuchar los textos con el lector de voz de la tableta y entregar la tarea como audio, presentación o mapa mental digital.",
-        "L'alumnat pot escoltar els textos amb el lector de veu de la tauleta i lliurar la tasca com a àudio, presentació o mapa mental digital."]},
+        "Incorporar recursos digitals (llibres digitals, aplicacions, lectors de text, presentacions interactives) que faciliten l'accés, la pràctica autònoma i l'expressió del que s'ha aprés."]},
   "II.13": {va: "Control de l'assistència",
     x: ["Registrar de forma sistemática la asistencia y la puntualidad del grupo para detectar pronto las ausencias reiteradas y comunicarlas a la familia y al equipo directivo.",
-        "Registrar de manera sistemàtica l'assistència i la puntualitat del grup per a detectar prompte les absències reiterades i comunicar-les a la família i a l'equip directiu."],
-    e: ["La tutora pasa lista a diario en ITACA y, a partir de tres faltas sin justificar en un mes, llama a la familia y lo anota en el registro de tutoría.",
-        "La tutora passa llista diàriament en ITACA i, a partir de tres faltes sense justificar en un mes, telefona a la família i ho anota en el registre de tutoria."]},
+        "Registrar de manera sistemàtica l'assistència i la puntualitat del grup per a detectar prompte les absències reiterades i comunicar-les a la família i a l'equip directiu."]},
   "II.14": {va: "Difusió accessible de la informació del centre a l'alumnat i les seues famílies",
     x: ["Asegurar que las comunicaciones del centro (circulares, calendario, normas, salidas) llegan y se entienden: lenguaje claro, varios idiomas, apoyos visuales y canales diversos.",
-        "Assegurar que les comunicacions del centre (circulars, calendari, normes, eixides) arriben i s'entenen: llenguatge clar, diversos idiomes, suports visuals i canals diversos."],
-    e: ["La circular de la excursión se envía por la app del centro con una versión en lectura fácil y traducida, y se explica en la reunión de inicio de curso.",
-        "La circular de l'excursió s'envia per l'app del centre amb una versió en lectura fàcil i traduïda, i s'explica en la reunió d'inici de curs."]},
-  "II.15": {va: "Altres:",
-    e: ["«Otros: horario visual semanal en la puerta del aula con las actividades de cada día».",
-        "«Altres: horari visual setmanal a la porta de l'aula amb les activitats de cada dia»."]},
+        "Assegurar que les comunicacions del centre (circulars, calendari, normes, eixides) arriben i s'entenen: llenguatge clar, diversos idiomes, suports visuals i canals diversos."]},
+  "II.15": {va: "Altres:"},
 
   /* ---------- MEDIDAS DE APRENDIZAJE ---------- */
   "II.17": {va: "Adequació personalitzada de les programacions didàctiques (tenint en compte la totalitat de l'alumnat). Planificació d'activitats d'ampliació i reforç dins de les unitats didàctiques/projectes.",
     x: ["Diseñar la programación de aula pensando desde el inicio en toda la diversidad del grupo, previendo actividades de refuerzo y de ampliación en cada unidad o proyecto.",
-        "Dissenyar la programació d'aula pensant des de l'inici en tota la diversitat del grup, preveient activitats de reforç i d'ampliació en cada unitat o projecte."],
-    e: ["Cada situación de aprendizaje incluye una tarea básica común, una ficha de refuerzo con más apoyos y un reto de ampliación que el alumnado elige al terminar.",
-        "Cada situació d'aprenentatge inclou una tasca bàsica comuna, una fitxa de reforç amb més suports i un repte d'ampliació que l'alumnat tria en acabar."]},
+        "Dissenyar la programació d'aula pensant des de l'inici en tota la diversitat del grup, preveient activitats de reforç i d'ampliació en cada unitat o projecte."]},
   "II.18": {va: "Aprenentatge cooperatiu",
     x: ["Estructurar el trabajo en equipos heterogéneos con roles, interdependencia positiva y responsabilidad individual, de modo que todos necesitan aportar para lograr el objetivo.",
-        "Estructurar el treball en equips heterogenis amb rols, interdependència positiva i responsabilitat individual, de manera que tots necessiten aportar per a aconseguir l'objectiu."],
-    e: ["Técnica «1-2-4»: cada alumno/a piensa su respuesta, la contrasta con su pareja y el equipo elabora una respuesta común; el portavoz rota en cada actividad.",
-        "Tècnica «1-2-4»: cada alumne/a pensa la resposta, la contrasta amb la parella i l'equip elabora una resposta comuna; el portaveu rota en cada activitat."]},
+        "Estructurar el treball en equips heterogenis amb rols, interdependència positiva i responsabilitat individual, de manera que tots necessiten aportar per a aconseguir l'objectiu."]},
   "II.19": {va: "Docència compartida",
     x: ["Dos docentes (tutor/a con PT, AL u otro docente) trabajan a la vez dentro del aula, planificando juntos y atendiendo al grupo de forma coordinada.",
-        "Dos docents (tutor/a amb PT, AL o un altre docent) treballen alhora dins de l'aula, planificant junts i atenent el grup de manera coordinada."],
-    e: ["En la sesión de escritura, la tutora dirige la actividad y la maestra de PT apoya a los equipos que lo necesitan revisando borradores con una lista de control.",
-        "En la sessió d'escriptura, la tutora dirigeix l'activitat i la mestra de PT dona suport als equips que ho necessiten revisant esborranys amb una llista de control."]},
+        "Dos docents (tutor/a amb PT, AL o un altre docent) treballen alhora dins de l'aula, planificant junts i atenent el grup de manera coordinada."]},
   "II.20": {va: "ABP (Aprenentatge Basat en Projectes)",
     x: ["Organizar el aprendizaje en torno a un proyecto que responde a una pregunta o reto real y culmina en un producto final; admite distintos niveles de participación.",
-        "Organitzar l'aprenentatge al voltant d'un projecte que respon a una pregunta o un repte real i culmina en un producte final; admet diferents nivells de participació."],
-    e: ["Proyecto «¿Cómo hacemos más verde el patio?»: cada equipo investiga, diseña y presenta una propuesta; el alumno/a se encarga de fotografiar y etiquetar las plantas.",
-        "Projecte «Com fem més verd el pati?»: cada equip investiga, dissenya i presenta una proposta; l'alumne/a s'encarrega de fotografiar i etiquetar les plantes."]},
+        "Organitzar l'aprenentatge al voltant d'un projecte que respon a una pregunta o un repte real i culmina en un producte final; admet diferents nivells de participació."]},
   "II.21": {va: "Estacions d'aprenentatge",
     x: ["Dividir una sesión en varias estaciones con actividades distintas por las que rotan los grupos en tiempos fijos; una de ellas suele ser con el docente para dar apoyo directo.",
-        "Dividir una sessió en diverses estacions amb activitats diferents per on roten els grups en temps fixos; una d'elles sol ser amb el docent per a donar suport directe."],
-    e: ["Cuatro estaciones de 12 minutos: lectura con la maestra, juego de vocabulario, ordenador con una app de comprensión y escritura creativa a partir de imágenes.",
-        "Quatre estacions de 12 minuts: lectura amb la mestra, joc de vocabulari, ordinador amb una app de comprensió i escriptura creativa a partir d'imatges."]},
+        "Dividir una sessió en diverses estacions amb activitats diferents per on roten els grups en temps fixos; una d'elles sol ser amb el docent per a donar suport directe."]},
   "II.22": {va: "Programació multinivell",
     x: ["Plantear un mismo tema o tarea con varios niveles de complejidad y de apoyo, de forma que todo el grupo trabaja los mismos contenidos, cada uno a su nivel.",
-        "Plantejar un mateix tema o tasca amb diversos nivells de complexitat i de suport, de manera que tot el grup treballa els mateixos continguts, cadascú al seu nivell."],
-    e: ["En la unidad de fracciones hay tres itinerarios (manipulativo con regletas, gráfico y simbólico); todos participan en la puesta en común final.",
-        "En la unitat de fraccions hi ha tres itineraris (manipulatiu amb regletes, gràfic i simbòlic); tots participen en la posada en comú final."]},
+        "Plantejar un mateix tema o tasca amb diversos nivells de complexitat i de suport, de manera que tot el grup treballa els mateixos continguts, cadascú al seu nivell."]},
   "II.23": {va: "Aprenentatge per parelles",
     x: ["Trabajo en parejas estables o rotativas (tutoría entre iguales, lectura en pareja) que multiplica las oportunidades de practicar, preguntar y recibir ayuda.",
-        "Treball en parelles estables o rotatives (tutoria entre iguals, lectura en parella) que multiplica les oportunitats de practicar, preguntar i rebre ajuda."],
-    e: ["Lectura en parejas 15 minutos al día: uno lee y el otro sigue el texto y le ayuda con una tarjeta de pistas; después intercambian los papeles.",
-        "Lectura en parelles 15 minuts al dia: un llig i l'altre segueix el text i l'ajuda amb una targeta de pistes; després intercanvien els papers."]},
+        "Treball en parelles estables o rotatives (tutoria entre iguals, lectura en parella) que multiplica les oportunitats de practicar, preguntar i rebre ajuda."]},
   "II.24": {va: "Actuacions educatives d'èxit: grups interactius, tertúlies dialògiques,...",
     x: ["Prácticas avaladas por la investigación (proyecto INCLUD-ED) que aumentan las interacciones en el aula y la participación de familias y voluntariado.",
-        "Pràctiques avalades per la investigació (projecte INCLUD-ED) que augmenten les interaccions a l'aula i la participació de famílies i voluntariat."],
-    e: ["Grupos interactivos semanales: cuatro grupos heterogéneos rotan por cuatro actividades de 15 minutos, cada una dinamizada por un familiar o voluntario.",
-        "Grups interactius setmanals: quatre grups heterogenis roten per quatre activitats de 15 minuts, cadascuna dinamitzada per un familiar o voluntari."]},
+        "Pràctiques avalades per la investigació (projecte INCLUD-ED) que augmenten les interaccions a l'aula i la participació de famílies i voluntariat."]},
   "II.25": {va: "Programes de prevenció de dificultats d'aprenentatge (funció executiva, consciència fonològica,...)",
     x: ["Programas sistemáticos con todo el grupo para estimular las habilidades base del aprendizaje y detectar pronto a quien necesita más apoyo.",
-        "Programes sistemàtics amb tot el grup per a estimular les habilitats base de l'aprenentatge i detectar prompte qui necessita més suport."],
-    e: ["Diez minutos diarios de juegos de conciencia fonológica (rimas, segmentar sílabas, aislar sonidos) en Infantil 5 años y 1º, con registro trimestral del progreso.",
-        "Deu minuts diaris de jocs de consciència fonològica (rimes, segmentar síl·labes, aïllar sons) en Infantil 5 anys i 1r, amb registre trimestral del progrés."]},
+        "Programes sistemàtics amb tot el grup per a estimular les habilitats base de l'aprenentatge i detectar prompte qui necessita més suport."]},
   "II.26": {va: "Desdoblaments",
     x: ["Dividir el grupo-clase en dos subgrupos atendidos por dos docentes en espacios distintos para reducir la ratio en determinadas áreas o sesiones.",
-        "Dividir el grup-classe en dos subgrups atesos per dos docents en espais diferents per a reduir la ràtio en determinades àrees o sessions."],
-    e: ["Las dos sesiones semanales de laboratorio de Ciencias se hacen con medio grupo, lo que permite más manipulación y atención individual.",
-        "Les dues sessions setmanals de laboratori de Ciències es fan amb mig grup, cosa que permet més manipulació i atenció individual."]},
+        "Dividir el grup-classe en dos subgrups atesos per dos docents en espais diferents per a reduir la ràtio en determinades àrees o sessions."]},
   "II.27": {va: "Aula invertida (Flipped Classroom)",
     x: ["El alumnado accede a la explicación antes de la clase (vídeo, lectura) y el tiempo de aula se dedica a practicar, resolver dudas y trabajar con apoyo.",
-        "L'alumnat accedeix a l'explicació abans de la classe (vídeo, lectura) i el temps d'aula es dedica a practicar, resoldre dubtes i treballar amb suport."],
-    e: ["Vídeo de 5 minutos sobre las partes de la planta para ver en casa; en clase, los equipos montan una planta con material reciclado y la docente apoya a quien no lo vio.",
-        "Vídeo de 5 minuts sobre les parts de la planta per a veure a casa; a classe, els equips munten una planta amb material reciclat i la docent ajuda qui no l'ha vist."]},
+        "L'alumnat accedeix a l'explicació abans de la classe (vídeo, lectura) i el temps d'aula es dedica a practicar, resoldre dubtes i treballar amb suport."]},
   "II.28": {va: "Tallers",
     x: ["Sesiones prácticas y manipulativas en torno a un tema (cocina, robótica, teatro, huerto) que favorecen el aprendizaje funcional y la participación de todo el alumnado.",
-        "Sessions pràctiques i manipulatives al voltant d'un tema (cuina, robòtica, teatre, hort) que afavoreixen l'aprenentatge funcional i la participació de tot l'alumnat."],
-    e: ["Taller quincenal de cocina: leer la receta con pictogramas, medir ingredientes y escribir la lista de la compra integra Lengua y Matemáticas.",
-        "Taller quinzenal de cuina: llegir la recepta amb pictogrames, mesurar ingredients i escriure la llista de la compra integra Llengua i Matemàtiques."]},
+        "Sessions pràctiques i manipulatives al voltant d'un tema (cuina, robòtica, teatre, hort) que afavoreixen l'aprenentatge funcional i la participació de tot l'alumnat."]},
   "II.29": {va: "Treball per equips",
     x: ["Organización estable del aula en equipos de trabajo con normas y responsabilidades compartidas, que facilita la ayuda mutua y la atención a la diversidad.",
-        "Organització estable de l'aula en equips de treball amb normes i responsabilitats compartides, que facilita l'ajuda mútua i l'atenció a la diversitat."],
-    e: ["La clase se organiza en cinco equipos base que se mantienen un trimestre; cada equipo tiene un plan de trabajo semanal y revisa su funcionamiento el viernes.",
-        "La classe s'organitza en cinc equips base que es mantenen un trimestre; cada equip té un pla de treball setmanal i revisa el seu funcionament el divendres."]},
+        "Organització estable de l'aula en equips de treball amb normes i responsabilitats compartides, que facilita l'ajuda mútua i l'atenció a la diversitat."]},
   "II.30": {va: "APS (Aprenentatge Servei)",
     x: ["Proyecto en el que el alumnado aprende contenidos curriculares mientras presta un servicio real a la comunidad, lo que refuerza la motivación y el sentido de pertenencia.",
-        "Projecte en què l'alumnat aprén continguts curriculars mentre presta un servei real a la comunitat, cosa que reforça la motivació i el sentiment de pertinença."],
-    e: ["El grupo graba audiocuentos para la residencia de mayores del barrio: practica la lectura expresiva, planifica la visita y recoge sus impresiones.",
-        "El grup grava audiocontes per a la residència de gent gran del barri: practica la lectura expressiva, planifica la visita i recull les seues impressions."]},
+        "Projecte en què l'alumnat aprén continguts curriculars mentre presta un servei real a la comunitat, cosa que reforça la motivació i el sentiment de pertinença."]},
   "II.31": {va: "Programa d'entrenament en estratègies d'aprenentatge: autoinstruccions, metacognició, tècniques d'estudi, rutines de pensament,...",
     x: ["Enseñar de forma explícita cómo aprender: planificar, autorregularse, estudiar y reflexionar sobre el propio pensamiento, con práctica guiada en las distintas áreas.",
-        "Ensenyar de manera explícita com aprendre: planificar, autoregular-se, estudiar i reflexionar sobre el propi pensament, amb pràctica guiada en les diferents àrees."],
-    e: ["Antes de cada problema se sigue la tarjeta de autoinstrucciones («¿Qué me piden? ¿Qué datos tengo? ¿Qué hago? ¿Lo reviso?») y al final se usa la rutina «Antes pensaba… ahora pienso…».",
-        "Abans de cada problema se segueix la targeta d'autoinstruccions («Què em demanen? Quines dades tinc? Què faig? Ho revise?») i al final s'usa la rutina «Abans pensava… ara pense…»."]},
+        "Ensenyar de manera explícita com aprendre: planificar, autoregular-se, estudiar i reflexionar sobre el propi pensament, amb pràctica guiada en les diferents àrees."]},
   "II.32": {va: "Diferents estratègies d'avaluació: rúbriques, escales, graelles, autoavaluació, coavaluació, treball en grup, diaris, portafolis,...",
     x: ["Usar instrumentos variados que permitan a cada alumno/a demostrar lo aprendido de distintas formas y conocer de antemano qué se espera de su trabajo.",
-        "Usar instruments variats que permeten a cada alumne/a demostrar el que ha aprés de diferents maneres i conéixer per endavant què s'espera del seu treball."],
-    e: ["La exposición oral se evalúa con una rúbrica visual compartida desde el inicio; el alumnado se autoevalúa con semáforos y guarda sus producciones en un portafolio.",
-        "L'exposició oral s'avalua amb una rúbrica visual compartida des de l'inici; l'alumnat s'autoavalua amb semàfors i guarda les seues produccions en un portafolis."]},
+        "Usar instruments variats que permeten a cada alumne/a demostrar el que ha aprés de diferents maneres i conéixer per endavant què s'espera del seu treball."]},
   "II.33": {va: "Organització per àmbits",
     x: ["Agrupar varias materias en ámbitos (por ejemplo, sociolingüístico y científico-matemático) impartidos por menos docentes, lo que favorece un enfoque globalizado y un seguimiento más cercano.",
-        "Agrupar diverses matèries en àmbits (per exemple, sociolingüístic i cientificomatemàtic) impartits per menys docents, cosa que afavoreix un enfocament globalitzat i un seguiment més pròxim."],
-    e: ["En 1º de ESO, el mismo docente imparte Lengua, Valenciano y Geografía e Historia como ámbito sociolingüístico, con proyectos que integran las tres materias.",
-        "En 1r d'ESO, el mateix docent imparteix Llengua, Valencià i Geografia i Història com a àmbit sociolingüístic, amb projectes que integren les tres matèries."]},
-  "II.34": {va: "Altres:",
-    e: ["«Otros: plan lector con lecturas a elegir en tres niveles de dificultad».",
-        "«Altres: pla lector amb lectures per triar en tres nivells de dificultat»."]},
+        "Agrupar diverses matèries en àmbits (per exemple, sociolingüístic i cientificomatemàtic) impartits per menys docents, cosa que afavoreix un enfocament globalitzat i un seguiment més pròxim."]},
+  "II.34": {va: "Altres:"},
 
   /* ---------- MEDIDAS DE PARTICIPACIÓN ---------- */
   "II.36": {va: "Incorporar al PAT: igualtat, respecte, resolució de conflictes, educació emocional...",
     x: ["Incluir en el Plan de Acción Tutorial sesiones planificadas sobre convivencia, igualdad y emociones dirigidas a todo el grupo.",
-        "Incloure en el Pla d'Acció Tutorial sessions planificades sobre convivència, igualtat i emocions adreçades a tot el grup."],
-    e: ["Una sesión de tutoría quincenal de educación emocional: identificar emociones con el «emocionómetro» y practicar el semáforo para resolver conflictos.",
-        "Una sessió de tutoria quinzenal d'educació emocional: identificar emocions amb l'«emocionòmetre» i practicar el semàfor per a resoldre conflictes."]},
+        "Incloure en el Pla d'Acció Tutorial sessions planificades sobre convivència, igualtat i emocions adreçades a tot el grup."]},
   "II.37": {va: "Mesures de convivència: TEI, club de valents, cercle d'amics, consell de delegats,...",
     x: ["Programas estructurados de convivencia y prevención del acoso en los que el alumnado se implica activamente en el cuidado de las relaciones.",
-        "Programes estructurats de convivència i prevenció de l'assetjament en què l'alumnat s'implica activament en la cura de les relacions."],
-    e: ["Programa TEI: el alumnado de 5º tutoriza emocionalmente al de 3º; en el aula funciona el «club de valientes», que rechaza abiertamente las conductas violentas.",
-        "Programa TEI: l'alumnat de 5é tutoritza emocionalment el de 3r; a l'aula funciona el «club de valents», que rebutja obertament les conductes violentes."]},
+        "Programes estructurats de convivència i prevenció de l'assetjament en què l'alumnat s'implica activament en la cura de les relacions."]},
   "II.38": {va: "Activitats de sensibilització de caràcter coeducatiu, igualitari i inclusiu",
     x: ["Actividades para cuestionar estereotipos de género y otros prejuicios y valorar la diversidad como riqueza del grupo.",
-        "Activitats per a qüestionar estereotips de gènere i altres prejudicis i valorar la diversitat com a riquesa del grup."],
-    e: ["Análisis de anuncios de juguetes en Navidad: el grupo detecta estereotipos y crea su propio anuncio igualitario.",
-        "Anàlisi d'anuncis de joguets per Nadal: el grup detecta estereotips i crea el seu propi anunci igualitari."]},
+        "Activitats per a qüestionar estereotips de gènere i altres prejudicis i valorar la diversitat com a riquesa del grup."]},
   "II.39": {va: "Sensibilització del grup classe cap a la diversitat.",
     x: ["Ayudar al grupo a comprender y respetar las diferencias (funcionales, culturales, de aprendizaje), preparando la acogida y la participación de todos sus miembros.",
-        "Ajudar el grup a comprendre i respectar les diferències (funcionals, culturals, d'aprenentatge), preparant l'acollida i la participació de tots els seus membres."],
-    e: ["Lectura y debate de un cuento sobre el autismo y taller «ponte en mi lugar» (escribir con guantes, seguir instrucciones en otro idioma).",
-        "Lectura i debat d'un conte sobre l'autisme i taller «posa't al meu lloc» (escriure amb guants, seguir instruccions en un altre idioma)."]},
+        "Ajudar el grup a comprendre i respectar les diferències (funcionals, culturals, d'aprenentatge), preparant l'acollida i la participació de tots els seus membres."]},
   "II.40": {va: "Avaluació del clima de l'aula / Sociograma.",
     x: ["Recoger información sobre las relaciones del grupo (sociograma, cuestionarios de clima) para detectar aislamiento o rechazo y orientar las intervenciones.",
-        "Recollir informació sobre les relacions del grup (sociograma, qüestionaris de clima) per a detectar aïllament o rebuig i orientar les intervencions."],
-    e: ["En octubre y en marzo se aplica un sociograma sencillo («¿Con quién te gusta jugar?»); el resultado se usa para formar equipos y organizar el patio.",
-        "A l'octubre i al març s'aplica un sociograma senzill («Amb qui t'agrada jugar?»); el resultat s'usa per a formar equips i organitzar el pati."]},
+        "Recollir informació sobre les relacions del grup (sociograma, qüestionaris de clima) per a detectar aïllament o rebuig i orientar les intervencions."]},
   "II.41": {va: "Establiment de rols i responsabilitats.",
     x: ["Asignar responsabilidades rotativas dentro del aula y de los equipos para fomentar la autonomía, la pertenencia y la valoración de todos.",
-        "Assignar responsabilitats rotatives dins de l'aula i dels equips per a fomentar l'autonomia, la pertinença i la valoració de tots."],
-    e: ["Panel de encargos semanal (material, plantas, agenda, portavoz); el alumno/a con dificultades de atención reparte el material, lo que le permite moverse.",
-        "Panell d'encàrrecs setmanal (material, plantes, agenda, portaveu); l'alumne/a amb dificultats d'atenció reparteix el material, cosa que li permet moure's."]},
+        "Assignar responsabilitats rotatives dins de l'aula i dels equips per a fomentar l'autonomia, la pertinença i la valoració de tots."]},
   "II.42": {va: "Assemblees",
     x: ["Espacio regular de diálogo del grupo para compartir, tomar decisiones y resolver conflictos de forma participativa.",
-        "Espai regular de diàleg del grup per a compartir, prendre decisions i resoldre conflictes de manera participativa."],
-    e: ["Asamblea de los lunes con turnos de palabra mediante un objeto; se revisan las propuestas del buzón de la clase y se acuerdan soluciones.",
-        "Assemblea dels dilluns amb torns de paraula mitjançant un objecte; es revisen les propostes de la bústia de la classe i s'acorden solucions."]},
+        "Espai regular de diàleg del grup per a compartir, prendre decisions i resoldre conflictes de manera participativa."]},
   "II.43": {va: "Assignació/distribució de tasques (p. ex. en treballs grupals)",
     x: ["Repartir de forma explícita las tareas de un trabajo en grupo, ajustándolas a las capacidades e intereses de cada miembro para asegurar que todos participan.",
-        "Repartir de manera explícita les tasques d'un treball en grup, ajustant-les a les capacitats i interessos de cada membre per a assegurar que tots hi participen."],
-    e: ["En el mural de los planetas cada miembro tiene una tarjeta de tarea (buscar datos, dibujar, redactar, exponer) acordada con el equipo y revisada por la docente.",
-        "En el mural dels planetes cada membre té una targeta de tasca (buscar dades, dibuixar, redactar, exposar) acordada amb l'equip i revisada per la docent."]},
+        "Repartir de manera explícita les tasques d'un treball en grup, ajustant-les a les capacitats i interessos de cada membre per a assegurar que tots hi participen."]},
   "II.44": {va: "Dinàmiques interpersonals de l'aula, actuacions per a afavorir relacions positives",
     x: ["Dinámicas de cohesión y conocimiento mutuo que crean un clima de confianza y facilitan la inclusión de todo el alumnado.",
-        "Dinàmiques de cohesió i coneixement mutu que creen un clima de confiança i faciliten la inclusió de tot l'alumnat."],
-    e: ["Dinámica semanal «el protagonista»: un alumno/a comparte sus gustos y el resto le escribe un mensaje positivo que se guarda en su caja.",
-        "Dinàmica setmanal «el protagonista»: un alumne/a comparteix els seus gustos i la resta li escriu un missatge positiu que es guarda en la seua caixa."]},
+        "Dinàmiques de cohesió i coneixement mutu que creen un clima de confiança i faciliten la inclusió de tot l'alumnat."]},
   "II.45": {va: "Activitats que permeten l'entrenament en habilitats comunicatives: debats, role-playing...",
     x: ["Practicar habilidades comunicativas y sociales (escuchar, pedir ayuda, expresar desacuerdo) mediante situaciones simuladas y debates guiados.",
-        "Practicar habilitats comunicatives i socials (escoltar, demanar ajuda, expressar desacord) mitjançant situacions simulades i debats guiats."],
-    e: ["Role-playing de situaciones del patio («me quitan el balón», «quiero jugar») con un guion de frases útiles y reflexión posterior.",
-        "Role-playing de situacions del pati («em lleven la pilota», «vull jugar») amb un guió de frases útils i reflexió posterior."]},
+        "Practicar habilitats comunicatives i socials (escoltar, demanar ajuda, expressar desacord) mitjançant situacions simulades i debats guiats."]},
   "II.46": {va: "Actualitzar i consensuar les normes de convivència del grup-classe",
     x: ["Elaborar con el alumnado unas normas claras, pocas y en positivo, revisarlas periódicamente y hacerlas visibles en el aula.",
-        "Elaborar amb l'alumnat unes normes clares, poques i en positiu, revisar-les periòdicament i fer-les visibles a l'aula."],
-    e: ["Las normas se acuerdan en asamblea, se ilustran con fotos del propio alumnado y se revisan al final de cada trimestre.",
-        "Les normes s'acorden en assemblea, s'il·lustren amb fotos del mateix alumnat i es revisen al final de cada trimestre."]},
-  "II.47": {va: "Altres:",
-    e: ["«Otros: patios dinamizados con juegos cooperativos dos días por semana».",
-        "«Altres: patis dinamitzats amb jocs cooperatius dos dies per setmana»."]},
+        "Elaborar amb l'alumnat unes normes clares, poques i en positiu, revisar-les periòdicament i fer-les visibles a l'aula."]},
+  "II.47": {va: "Altres:"},
 
   /* ---------- MEDIDAS DE COMPENSACIÓN DE DESIGUALDADES ---------- */
   "II.49": {va: "Control d'assistència i prevenció de l'absentisme.",
     x: ["Seguimiento de la asistencia con actuaciones preventivas (contacto con las familias, refuerzo de la puntualidad) y activación del protocolo de absentismo cuando procede.",
-        "Seguiment de l'assistència amb actuacions preventives (contacte amb les famílies, reforç de la puntualitat) i activació del protocol d'absentisme quan pertoca."],
-    e: ["Registro semanal de faltas y retrasos; ante un patrón de ausencias, entrevista con la familia y, si persiste, comunicación a jefatura de estudios y a servicios sociales.",
-        "Registre setmanal de faltes i retards; davant d'un patró d'absències, entrevista amb la família i, si persisteix, comunicació a la direcció d'estudis i als serveis socials."]},
+        "Seguiment de l'assistència amb actuacions preventives (contacte amb les famílies, reforç de la puntualitat) i activació del protocol d'absentisme quan pertoca."]},
   "II.50": {va: "Programes de desenvolupament d'hàbits d'higiene, alimentació i vida saludable.",
     x: ["Actividades con todo el grupo para promover hábitos de salud (higiene, descanso, alimentación, actividad física), especialmente relevantes en contextos desfavorecidos.",
-        "Activitats amb tot el grup per a promoure hàbits de salut (higiene, descans, alimentació, activitat física), especialment rellevants en contextos desfavorits."],
-    e: ["Almuerzo saludable con calendario semanal (fruta el lunes, bocadillo el martes…) y rutina de lavado de manos y dientes después del comedor.",
-        "Esmorzar saludable amb calendari setmanal (fruita el dilluns, entrepà el dimarts…) i rutina de rentat de mans i dents després del menjador."]},
+        "Activitats amb tot el grup per a promoure hàbits de salut (higiene, descans, alimentació, activitat física), especialment rellevants en contextos desfavorits."]},
   "II.51": {va: "Accions transversals d'educació intercultural amb el grup classe.",
     x: ["Incorporar a las áreas la diversidad cultural del alumnado y del entorno, valorando las lenguas y culturas de origen y previniendo el racismo.",
-        "Incorporar a les àrees la diversitat cultural de l'alumnat i de l'entorn, valorant les llengües i cultures d'origen i previnguent el racisme."],
-    e: ["Mapa del mundo con los orígenes de las familias; cada mes una familia comparte con la clase una costumbre, un juego o palabras de su lengua.",
-        "Mapa del món amb els orígens de les famílies; cada mes una família comparteix amb la classe un costum, un joc o paraules de la seua llengua."]},
+        "Incorporar a les àrees la diversitat cultural de l'alumnat i de l'entorn, valorant les llengües i cultures d'origen i previnguent el racisme."]},
   "II.52": {va: "Activitats de sensibilització: coeducació, igualtat, inclusió...",
     x: ["Acciones puntuales o continuadas, a menudo vinculadas a efemérides (8M, 25N, Día de las Personas con Discapacidad), para promover la igualdad de oportunidades.",
-        "Accions puntuals o continuades, sovint vinculades a efemèrides (8M, 25N, Dia de les Persones amb Discapacitat), per a promoure la igualtat d'oportunitats."],
-    e: ["Con motivo del 8M, cada alumno/a investiga sobre una científica y el grupo elabora una línea del tiempo en el pasillo.",
-        "Amb motiu del 8M, cada alumne/a investiga sobre una científica i el grup elabora una línia del temps al passadís."]},
-  "II.53": {va: "Altres:",
-    e: ["«Otros: préstamo de material escolar y banco de libros para todo el grupo».",
-        "«Altres: préstec de material escolar i banc de llibres per a tot el grup»."]}
+        "Accions puntuals o continuades, sovint vinculades a efemèrides (8M, 25N, Dia de les Persones amb Discapacitat), per a promoure la igualtat d'oportunitats."]},
+  "II.53": {va: "Altres:"}
 });
 
 </script>
 <script>
 /* Textos de las medidas de NIVEL III (hoja «Nivel III» de la plantilla).
    Clave = "III.<fila del Excel>". Las filas de apartado (sin «¿Aplica?») llevan
-   solo rótulo y explicación general; las medidas, explicación y ejemplo. */
+   solo rótulo y explicación general; los ejemplos están en ejemplos-n3.js. */
 window.TEXTOS = Object.assign(window.TEXTOS || {}, {
   /* ================= MEDIDAS DE ACCESO ================= */
   "III.7": {va: "ACCESSIBILITAT PERSONALITZADA AMB MITJANS COMUNS",
@@ -1197,247 +1133,155 @@ window.TEXTOS = Object.assign(window.TEXTOS || {}, {
         "Ajustos d'espais, mobiliari i instal·lacions perquè l'alumne/a amb dificultats motrius es desplace i participe amb la màxima autonomia possible."]},
   "III.9": {va: "Mesures per al desplaçament autònom: rampa, ascensor, barres passamans, amplària de portes i espais,...",
     x: ["Garantizar recorridos accesibles por el centro: rampas, ascensor, pasamanos, y pasillos y puertas con anchura suficiente.",
-        "Garantir recorreguts accessibles pel centre: rampes, ascensor, passamans, i passadissos i portes amb amplària suficient."],
-    e: ["El aula del grupo se traslada a la planta baja y se reorganizan las mesas para dejar un pasillo de 90 cm hasta la pizarra y la puerta.",
-        "L'aula del grup es trasllada a la planta baixa i es reorganitzen les taules per a deixar un passadís de 90 cm fins a la pissarra i la porta."]},
+        "Garantir recorreguts accessibles pel centre: rampes, ascensor, passamans, i passadissos i portes amb amplària suficient."]},
   "III.10": {va: "Accés a la informació: taulers d'anuncis a una altura mitjana, taulells/taules de diferents mesures,...",
     x: ["Situar la información y los puntos de atención a una altura y en una posición alcanzables desde una silla de ruedas o para alumnado de baja estatura.",
-        "Situar la informació i els punts d'atenció a una altura i en una posició abastables des d'una cadira de rodes o per a alumnat de baixa estatura."],
-    e: ["El horario, el panel de encargos y la percha del alumno/a se colocan a un metro de altura; el mostrador de secretaría tiene un tramo bajo.",
-        "L'horari, el panell d'encàrrecs i el penjador de l'alumne/a es col·loquen a un metre d'altura; el taulell de secretaria té un tram baix."]},
+        "Situar la informació i els punts d'atenció a una altura i en una posició abastables des d'una cadira de rodes o per a alumnat de baixa estatura."]},
   "III.11": {va: "Adequació de banys: barres de suport, vàter i lavabos accessibles,...",
     x: ["Disponer de un aseo adaptado y cercano con barras de apoyo, espacio de giro y elementos al alcance.",
-        "Disposar d'un lavabo adaptat i pròxim amb barres de suport, espai de gir i elements a l'abast."],
-    e: ["Se habilita el aseo adaptado de la planta baja con barra abatible y grifo de palanca; el alumno/a dispone de tiempo extra para usarlo.",
-        "S'habilita el lavabo adaptat de la planta baixa amb barra abatible i aixeta de palanca; l'alumne/a disposa de temps extra per a usar-lo."]},
+        "Disposar d'un lavabo adaptat i pròxim amb barres de suport, espai de gir i elements a l'abast."]},
   "III.12": {va: "Adequació de mobiliari, dispositius i productes d'ús comú",
     x: ["Ajustar mesa, silla, atril y utensilios de uso común (tijeras, lápices, ratón) para facilitar la postura y la manipulación.",
-        "Ajustar taula, cadira, faristol i utensilis d'ús comú (tisores, llapis, ratolí) per a facilitar la postura i la manipulació."],
-    e: ["Mesa regulable en altura, atril inclinado, engrosadores para el lápiz y tijeras de muelle; el teclado del ordenador tiene carcasa.",
-        "Taula regulable en altura, faristol inclinat, engruixidors per al llapis i tisores de moll; el teclat de l'ordinador té carcassa."]},
+        "Ajustar taula, cadira, faristol i utensilis d'ús comú (tisores, llapis, ratolí) per a facilitar la postura i la manipulació."]},
   "III.13": {va: "Eliminació de barreres sensorials",
     x: ["Ajustes del entorno para alumnado con discapacidad visual o auditiva que mejoran su acceso a la información y su orientación en el centro.",
         "Ajustos de l'entorn per a alumnat amb discapacitat visual o auditiva que milloren el seu accés a la informació i la seua orientació en el centre."]},
   "III.14": {va: "Accessibilitat visual: adequació de condicions d'il·luminació: eliminació de reflexos, disposició de llum,...",
     x: ["Controlar la luz natural y artificial para evitar deslumbramientos y reflejos y asegurar una buena iluminación del puesto de trabajo.",
-        "Controlar la llum natural i artificial per a evitar enlluernaments i reflexos i assegurar una bona il·luminació del lloc de treball."],
-    e: ["El alumno/a se sienta de espaldas a la ventana y con flexo en la mesa; se usa una pizarra mate y se bajan los estores en las horas de sol directo.",
-        "L'alumne/a s'asseu d'esquena a la finestra i amb flexo a la taula; s'usa una pissarra mat i s'abaixen els estors en les hores de sol directe."]},
+        "Controlar la llum natural i artificial per a evitar enlluernaments i reflexos i assegurar una bona il·luminació del lloc de treball."]},
   "III.15": {va: "Accessibilitat visual: accés a la informació: grandària de la cartelleria, proximitat, contrast,...",
     x: ["Ampliar y contrastar la información escrita del aula y del centro y situar al alumno/a cerca de las fuentes de información.",
-        "Ampliar i contrastar la informació escrita de l'aula i del centre i situar l'alumne/a a prop de les fonts d'informació."],
-    e: ["Carteles del aula en letra grande, negra sobre amarillo; el alumno/a se sienta en primera fila y recibe una copia ampliada de lo que se escribe en la pizarra.",
-        "Cartells de l'aula en lletra gran, negra sobre groc; l'alumne/a s'asseu en primera fila i rep una còpia ampliada del que s'escriu en la pissarra."]},
+        "Ampliar i contrastar la informació escrita de l'aula i del centre i situar l'alumne/a a prop de les fonts d'informació."]},
   "III.16": {va: "Accessibilitat visual: claus auditives en l'entorn",
     x: ["Usar señales sonoras y verbales que permitan al alumno/a con baja visión anticipar cambios y orientarse.",
-        "Usar senyals sonors i verbals que permeten a l'alumne/a amb baixa visió anticipar canvis i orientar-se."],
-    e: ["El docente verbaliza todo lo que escribe y nombra a quien habla; un sonido distinto marca el cambio de actividad y la salida al patio.",
-        "El docent verbalitza tot el que escriu i anomena qui parla; un so diferent marca el canvi d'activitat i l'eixida al pati."]},
+        "Usar senyals sonors i verbals que permeten a l'alumne/a amb baixa visió anticipar canvis i orientar-se."]},
   "III.17": {va: "Accessibilitat auditiva: adequació de condicions de sonoritat: reducció de sons ambientals, eliminació de reverberacions,...",
     x: ["Reducir el ruido y la reverberación del aula para mejorar la percepción del habla, sobre todo si el alumno/a usa audífonos o implante coclear.",
-        "Reduir el soroll i la reverberació de l'aula per a millorar la percepció de la parla, sobretot si l'alumne/a usa audiòfons o implant coclear."],
-    e: ["Tacos de fieltro en las patas de las sillas, corcho en las paredes y el aula más alejada del patio; se usa la emisora FM durante las explicaciones.",
-        "Tacs de feltre a les potes de les cadires, suro a les parets i l'aula més allunyada del pati; s'usa l'emissora FM durant les explicacions."]},
+        "Reduir el soroll i la reverberació de l'aula per a millorar la percepció de la parla, sobretot si l'alumne/a usa audiòfons o implant coclear."]},
   "III.18": {va: "Accessibilitat auditiva: accés a la informació: condicions d'accés a la lectura labial",
     x: ["Asegurar que el alumno/a ve bien la cara de quien habla: ubicación, iluminación del rostro y hábitos comunicativos del grupo.",
-        "Assegurar que l'alumne/a veu bé la cara de qui parla: ubicació, il·luminació del rostre i hàbits comunicatius del grup."],
-    e: ["Mesas en U; el docente no habla mientras escribe en la pizarra ni de espaldas a la ventana, y los compañeros levantan la mano antes de intervenir.",
-        "Taules en U; el docent no parla mentre escriu en la pissarra ni d'esquena a la finestra, i els companys alcen la mà abans d'intervindre."]},
+        "Assegurar que l'alumne/a veu bé la cara de qui parla: ubicació, il·luminació del rostre i hàbits comunicatius del grup."]},
   "III.19": {va: "Eliminació de barreres cognitives",
     x: ["Medidas de accesibilidad cognitiva que hacen que los espacios y la información sean fáciles de entender; útiles para alumnado con TEA, discapacidad intelectual o dificultades de comprensión.",
         "Mesures d'accessibilitat cognitiva que fan que els espais i la informació siguen fàcils d'entendre; útils per a alumnat amb TEA, discapacitat intel·lectual o dificultats de comprensió."]},
   "III.20": {va: "Comprensió dels espais: organització d'espais: ubicació d'aules, ubicació de mobiliari, estris...",
     x: ["Organizar espacios estables, previsibles y con funciones claras para reducir la confusión y la ansiedad.",
-        "Organitzar espais estables, previsibles i amb funcions clares per a reduir la confusió i l'ansietat."],
-    e: ["Zona de trabajo individual delimitada con biombo, rincón de calma y materiales siempre en el mismo lugar, etiquetados con foto.",
-        "Zona de treball individual delimitada amb biombo, racó de calma i materials sempre al mateix lloc, etiquetats amb foto."]},
+        "Organitzar espais estables, previsibles i amb funcions clares per a reduir la confusió i l'ansietat."]},
   "III.21": {va: "Comprensió dels espais: senyalització d'espais i itineraris amb suport d'imatges: directoris, cartelleria, senyalització diferenciada per colors...",
     x: ["Señalizar dependencias y recorridos con pictogramas, fotos y colores para que el alumno/a se oriente y se desplace de forma autónoma.",
-        "Senyalitzar dependències i recorreguts amb pictogrames, fotos i colors perquè l'alumne/a s'oriente i es desplace de manera autònoma."],
-    e: ["Pictogramas ARASAAC en las puertas (aula, baño, comedor, PT) y una línea de color en el suelo desde la entrada hasta el aula.",
-        "Pictogrames ARASAAC a les portes (aula, bany, menjador, PT) i una línia de color a terra des de l'entrada fins a l'aula."]},
+        "Senyalitzar dependències i recorreguts amb pictogrames, fotos i colors perquè l'alumne/a s'oriente i es desplace de manera autònoma."]},
   "III.22": {va: "Accés a la informació: text amb suport d'imatges, pautes de lectura accessible, estructura i organització de la informació,...",
     x: ["Presentar la información con lenguaje sencillo, frases cortas, apoyos visuales y una estructura clara (lectura fácil), incluidas agendas y horarios visuales.",
-        "Presentar la informació amb llenguatge senzill, frases curtes, suports visuals i una estructura clara (lectura fàcil), incloses agendes i horaris visuals."],
-    e: ["Agenda visual diaria en la mesa del alumno/a, instrucciones de cada tarea en pasos numerados con pictogramas y anticipación de los cambios de rutina.",
-        "Agenda visual diària a la taula de l'alumne/a, instruccions de cada tasca en passos numerats amb pictogrames i anticipació dels canvis de rutina."]},
+        "Presentar la informació amb llenguatge senzill, frases curtes, suports visuals i una estructura clara (lectura fàcil), incloses agendes i horaris visuals."]},
   "III.23": {va: "Accessibilitat dels materials curriculars i didàctics d'ús comú",
     x: ["Adaptar el formato de los materiales del grupo (libro, fichas, exámenes) para que el alumno/a pueda usarlos: ampliados, digitales, en braille, en lectura fácil o con apoyos visuales.",
-        "Adaptar el format dels materials del grup (llibre, fitxes, exàmens) perquè l'alumne/a els puga usar: ampliats, digitals, en braille, en lectura fàcil o amb suports visuals."],
-    e: ["El libro de texto se facilita en PDF para usarlo con lector de pantalla y las fichas se entregan con enunciados cortos, palabras clave resaltadas y más espacio para responder.",
-        "El llibre de text es facilita en PDF per a usar-lo amb lector de pantalla i les fitxes es lliuren amb enunciats curts, paraules clau destacades i més espai per a respondre."]},
+        "Adaptar el format dels materials del grup (llibre, fitxes, exàmens) perquè l'alumne/a els puga usar: ampliats, digitals, en braille, en lectura fàcil o amb suports visuals."]},
   "III.24": {va: "Adequació de totes les activitats complementàries i extraescolars del grup",
     x: ["Planificar salidas, excursiones, fiestas y actividades extraescolares para que el alumno/a pueda participar en igualdad (transporte, accesibilidad, apoyos, anticipación).",
-        "Planificar eixides, excursions, festes i activitats extraescolars perquè l'alumne/a hi puga participar en igualtat (transport, accessibilitat, suports, anticipació)."],
-    e: ["Antes de la excursión se comprueba la accesibilidad del museo, se reserva un autobús con plataforma y se anticipa la visita con fotos; una educadora acompaña al grupo.",
-        "Abans de l'excursió es comprova l'accessibilitat del museu, es reserva un autobús amb plataforma i s'anticipa la visita amb fotos; una educadora acompanya el grup."]},
+        "Planificar eixides, excursions, festes i activitats extraescolars perquè l'alumne/a hi puga participar en igualtat (transport, accessibilitat, suports, anticipació)."]},
   "III.25": {va: "Ajudes i beques",
     x: ["Información, orientación y apoyo a la familia para solicitar las ayudas económicas a las que el alumno/a puede tener derecho, para que lo económico no sea una barrera.",
         "Informació, orientació i suport a la família per a sol·licitar les ajudes econòmiques a què l'alumne/a pot tindre dret, perquè allò econòmic no siga una barrera."]},
   "III.26": {va: "Estudi",
     x: ["Becas y ayudas para el estudio, como las del Ministerio para alumnado con necesidad específica de apoyo educativo o las de las etapas postobligatorias.",
-        "Beques i ajudes per a l'estudi, com les del Ministeri per a alumnat amb necessitat específica de suport educatiu o les de les etapes postobligatòries."],
-    e: ["La orientadora informa a la familia de la convocatoria de ayudas para alumnado con NEAE (reeducación pedagógica o del lenguaje) y la tutora le ayuda a reunir la documentación.",
-        "L'orientadora informa la família de la convocatòria d'ajudes per a alumnat amb NESE (reeducació pedagògica o del llenguatge) i la tutora l'ajuda a reunir la documentació."]},
+        "Beques i ajudes per a l'estudi, com les del Ministeri per a alumnat amb necessitat específica de suport educatiu o les de les etapes postobligatòries."]},
   "III.27": {va: "Menjador",
     x: ["Ayuda de comedor escolar para familias en situación socioeconómica desfavorable o con circunstancias sobrevenidas.",
-        "Ajuda de menjador escolar per a famílies en situació socioeconòmica desfavorable o amb circumstàncies sobrevingudes."],
-    e: ["Ante un cambio en la situación laboral de la familia, el centro tramita la ayuda de comedor por circunstancias sobrevenidas.",
-        "Davant d'un canvi en la situació laboral de la família, el centre tramita l'ajuda de menjador per circumstàncies sobrevingudes."]},
+        "Ajuda de menjador escolar per a famílies en situació socioeconòmica desfavorable o amb circumstàncies sobrevingudes."]},
   "III.28": {va: "Transport",
     x: ["Ayudas o servicio de transporte escolar para el alumnado que lo necesita por distancia, discapacidad o escolarización fuera de su localidad.",
-        "Ajudes o servei de transport escolar per a l'alumnat que el necessita per distància, discapacitat o escolarització fora de la seua localitat."],
-    e: ["El alumno/a con movilidad reducida utiliza la ruta de transporte adaptado; la conserje lo recibe en la puerta y lo acompaña al aula.",
-        "L'alumne/a amb mobilitat reduïda utilitza la ruta de transport adaptat; la conserge el rep a la porta i l'acompanya a l'aula."]},
+        "Ajudes o servei de transport escolar per a l'alumnat que el necessita per distància, discapacitat o escolarització fora de la seua localitat."]},
   "III.29": {va: "Altres (especificar)",
     x: ["Otras ayudas que reciba el alumno/a: banco de libros (Xarxa Llibres), material escolar, actividades complementarias subvencionadas… Especifica cuál.",
-        "Altres ajudes que reba l'alumne/a: banc de llibres (Xarxa Llibres), material escolar, activitats complementàries subvencionades… Especifica quina."],
-    e: ["«Otros: Xarxa Llibres y préstamo de una tableta del centro».",
-        "«Altres: Xarxa Llibres i préstec d'una tauleta del centre»."]},
+        "Altres ajudes que reba l'alumne/a: banc de llibres (Xarxa Llibres), material escolar, activitats complementàries subvencionades… Especifica quina."]},
   "III.30": {va: "Coordinació amb serveis educatius d'intervenció especialitzada",
     x: ["Coordinación con servicios del sistema educativo que intervienen con el alumno/a de forma especializada o fuera del aula ordinaria, para dar continuidad a la respuesta educativa.",
         "Coordinació amb serveis del sistema educatiu que intervenen amb l'alumne/a de manera especialitzada o fora de l'aula ordinària, per a donar continuïtat a la resposta educativa."]},
   "III.31": {va: "Unitat d'Atenció i Intervenció (UAI) del PREVI",
     x: ["La UAI del PREVI (Plan de prevención de la violencia y promoción de la convivencia) asesora e interviene en casos de conflicto grave, acoso o violencia.",
-        "La UAI del PREVI (Pla de prevenció de la violència i promoció de la convivència) assessora i intervé en casos de conflicte greu, assetjament o violència."],
-    e: ["Ante una posible situación de acoso, la dirección contacta con la UAI, que asesora en la aplicación del protocolo y en las medidas de protección.",
-        "Davant d'una possible situació d'assetjament, la direcció contacta amb la UAI, que assessora en l'aplicació del protocol i en les mesures de protecció."]},
+        "La UAI del PREVI (Pla de prevenció de la violència i promoció de la convivència) assessora i intervé en casos de conflicte greu, assetjament o violència."]},
   "III.32": {va: "Centres d'Educació Especial (CEE)",
     x: ["Coordinación con un CEE, por ejemplo en la escolarización combinada o cuando el CEE actúa como centro de recursos que asesora al centro ordinario.",
-        "Coordinació amb un CEE, per exemple en l'escolarització combinada o quan el CEE actua com a centre de recursos que assessora el centre ordinari."],
-    e: ["El alumno/a asiste dos días al CEE y tres al colegio; las tutoras comparten cada trimestre objetivos y avances de su plan de actuación personalizado.",
-        "L'alumne/a assisteix dos dies al CEE i tres al col·legi; les tutores comparteixen cada trimestre objectius i avanços del seu pla d'actuació personalitzat."]},
+        "Coordinació amb un CEE, per exemple en l'escolarització combinada o quan el CEE actua com a centre de recursos que assessora el centre ordinari."]},
   "III.33": {va: "Unitats Educatives Terapèutiques (UET)",
     x: ["Unidades que atienden temporalmente al alumnado con trastornos mentales graves que impiden su asistencia al centro ordinario; requieren coordinación para el retorno.",
-        "Unitats que atenen temporalment l'alumnat amb trastorns mentals greus que n'impedeixen l'assistència al centre ordinari; requereixen coordinació per al retorn."],
-    e: ["Durante su estancia en la UET, la tutora envía cada mes las tareas clave y se planifica con la unidad un retorno progresivo al aula.",
-        "Durant la seua estada a la UET, la tutora envia cada mes les tasques clau i es planifica amb la unitat un retorn progressiu a l'aula."]},
+        "Unitats que atenen temporalment l'alumnat amb trastorns mentals greus que n'impedeixen l'assistència al centre ordinari; requereixen coordinació per al retorn."]},
   "III.34": {va: "Unitats Pedagògiques Hospitalàries (UPH)",
     x: ["Docentes que atienden al alumnado hospitalizado; la coordinación asegura la continuidad del proceso educativo durante el ingreso.",
-        "Docents que atenen l'alumnat hospitalitzat; la coordinació assegura la continuïtat del procés educatiu durant l'ingrés."],
-    e: ["El equipo docente envía a la UPH el plan de trabajo semanal y el alumno/a mantiene videollamadas quincenales con su clase.",
-        "L'equip docent envia a la UPH el pla de treball setmanal i l'alumne/a manté videotrucades quinzenals amb la seua classe."]},
+        "Docents que atenen l'alumnat hospitalitzat; la coordinació assegura la continuïtat del procés educatiu durant l'ingrés."]},
   "III.35": {va: "Serveis Especialitzats d'Orientació (SEO)",
     x: ["Servicios de orientación de zona que asesoran a los centros en los casos de mayor complejidad (evaluaciones, TEA, conducta, recursos especializados).",
-        "Serveis d'orientació de zona que assessoren els centres en els casos de més complexitat (avaluacions, TEA, conducta, recursos especialitzats)."],
-    e: ["La unidad de orientación del centro solicita al SEO asesoramiento especializado en conducta y se acuerda un plan de intervención con seguimiento mensual.",
-        "La unitat d'orientació del centre sol·licita al SEO assessorament especialitzat en conducta i s'acorda un pla d'intervenció amb seguiment mensual."]},
-  "III.36": {va: "Altres (especificar)",
-    e: ["«Otros: coordinación con el profesorado de atención educativa domiciliaria».",
-        "«Altres: coordinació amb el professorat d'atenció educativa domiciliària»."]},
+        "Serveis d'orientació de zona que assessoren els centres en els casos de més complexitat (avaluacions, TEA, conducta, recursos especialitzats)."]},
+  "III.36": {va: "Altres (especificar)"},
   "III.37": {va: "Coordinació amb agents i serveis externs",
     x: ["Coordinación con servicios sociales, sanitarios, de protección y entidades que intervienen con el alumno/a o su familia, para compartir la información necesaria (con consentimiento y confidencialidad) y actuar de forma coherente.",
         "Coordinació amb serveis socials, sanitaris, de protecció i entitats que intervenen amb l'alumne/a o la seua família, per a compartir la informació necessària (amb consentiment i confidencialitat) i actuar de manera coherent."]},
   "III.38": {va: "Equip d'atenció primària bàsica de serveis socials",
     x: ["Coordinación con los servicios sociales municipales ante situaciones de vulnerabilidad social, absentismo o necesidades básicas no cubiertas.",
-        "Coordinació amb els serveis socials municipals davant de situacions de vulnerabilitat social, absentisme o necessitats bàsiques no cobertes."],
-    e: ["Reunión trimestral entre tutora, orientadora y educadora social del ayuntamiento para hacer seguimiento de la asistencia y del apoyo a la familia.",
-        "Reunió trimestral entre tutora, orientadora i educadora social de l'ajuntament per a fer el seguiment de l'assistència i del suport a la família."]},
+        "Coordinació amb els serveis socials municipals davant de situacions de vulnerabilitat social, absentisme o necessitats bàsiques no cobertes."]},
   "III.39": {va: "Equip especialitzat d'intervenció en la infància i l'adolescència (EEIIA)",
     x: ["Equipo de servicios sociales especializado que interviene con menores en situación de riesgo o desprotección y con sus familias.",
-        "Equip de serveis socials especialitzat que intervé amb menors en situació de risc o desprotecció i amb les seues famílies."],
-    e: ["El EEIIA que trabaja con la familia y el centro acuerdan indicadores de seguimiento (asistencia, higiene, estado emocional) y se comunican cada mes.",
-        "L'EEIIA que treballa amb la família i el centre acorden indicadors de seguiment (assistència, higiene, estat emocional) i es comuniquen cada mes."]},
+        "Equip de serveis socials especialitzat que intervé amb menors en situació de risc o desprotecció i amb les seues famílies."]},
   "III.40": {va: "Mediació intercultural",
     x: ["Intervención de mediadores interculturales o intérpretes para facilitar la comunicación y la comprensión mutua entre el centro y familias de otras culturas o lenguas.",
-        "Intervenció de mediadors interculturals o intèrprets per a facilitar la comunicació i la comprensió mútua entre el centre i famílies d'altres cultures o llengües."],
-    e: ["La primera entrevista con la familia recién llegada se hace con una mediadora que traduce y explica el funcionamiento del centro, el comedor y las ayudas.",
-        "La primera entrevista amb la família nouvinguda es fa amb una mediadora que tradueix i explica el funcionament del centre, el menjador i les ajudes."]},
+        "Intervenció de mediadors interculturals o intèrprets per a facilitar la comunicació i la comprensió mútua entre el centre i famílies d'altres cultures o llengües."]},
   "III.41": {va: "Centre de salut: primària i especialitats",
     x: ["Coordinación con pediatría, enfermería y especialistas para el seguimiento de problemas de salud, tratamientos o derivaciones que afectan al aprendizaje.",
-        "Coordinació amb pediatria, infermeria i especialistes per al seguiment de problemes de salut, tractaments o derivacions que afecten l'aprenentatge."],
-    e: ["Con autorización de la familia, la orientadora envía a pediatría un informe de observación del aula para valorar una posible derivación a neuropediatría.",
-        "Amb autorització de la família, l'orientadora envia a pediatria un informe d'observació de l'aula per a valorar una possible derivació a neuropediatria."]},
+        "Coordinació amb pediatria, infermeria i especialistes per al seguiment de problemes de salut, tractaments o derivacions que afecten l'aprenentatge."]},
   "III.42": {va: "Centres d'Atenció Primerenca (CAT)",
     x: ["Coordinación con el centro de atención temprana que atiende al niño/a (0-6 años) para unificar objetivos y estrategias.",
-        "Coordinació amb el centre d'atenció primerenca que atén el xiquet/a (0-6 anys) per a unificar objectius i estratègies."],
-    e: ["La logopeda del CAT y la maestra de AL comparten objetivos de lenguaje y los pictogramas que usan, para trabajarlos igual en casa, en el CAT y en el aula.",
-        "La logopeda del CAT i la mestra d'AL comparteixen objectius de llenguatge i els pictogrames que usen, per a treballar-los igual a casa, al CAT i a l'aula."]},
+        "Coordinació amb el centre d'atenció primerenca que atén el xiquet/a (0-6 anys) per a unificar objectius i estratègies."]},
   "III.43": {va: "Unitat de Salut Mental Infantil i Juvenil (USMIA)",
     x: ["Coordinación con salud mental infanto-juvenil en casos de TDAH, ansiedad, conducta u otros trastornos, para compartir observaciones y ajustar la intervención.",
-        "Coordinació amb salut mental infantojuvenil en casos de TDAH, ansietat, conducta o altres trastorns, per a compartir observacions i ajustar la intervenció."],
-    e: ["La tutora completa los cuestionarios de conducta que solicita la USMIA y se informa a la familia de los cambios observados tras el inicio del tratamiento.",
-        "La tutora completa els qüestionaris de conducta que sol·licita la USMIA i s'informa la família dels canvis observats després de l'inici del tractament."]},
+        "Coordinació amb salut mental infantojuvenil en casos de TDAH, ansietat, conducta o altres trastorns, per a compartir observacions i ajustar la intervenció."]},
   "III.44": {va: "Unitats de Prevenció de Conductes Addictives (UPCCA)",
     x: ["Servicios municipales de prevención del consumo de drogas y de otras adicciones (pantallas, juego) que asesoran y desarrollan programas preventivos.",
-        "Serveis municipals de prevenció del consum de drogues i d'altres addiccions (pantalles, joc) que assessoren i desenvolupen programes preventius."],
-    e: ["Ante un uso problemático del móvil, se orienta a la familia hacia la UPCCA y en tutoría se trabaja un taller sobre uso saludable de las pantallas.",
-        "Davant d'un ús problemàtic del mòbil, s'orienta la família cap a la UPCCA i en tutoria es treballa un taller sobre ús saludable de les pantalles."]},
+        "Serveis municipals de prevenció del consum de drogues i d'altres addiccions (pantalles, joc) que assessoren i desenvolupen programes preventius."]},
   "III.45": {va: "Equips de la conselleria competent en protecció de la infància i l'adolescència",
     x: ["Coordinación con los equipos de protección de menores cuando el alumno/a está bajo una medida de protección (tutela, guarda, acogimiento).",
-        "Coordinació amb els equips de protecció de menors quan l'alumne/a està sota una mesura de protecció (tutela, guarda, acolliment)."],
-    e: ["Se mantiene contacto con la técnica de protección responsable del caso y se acuerda qué información escolar se comparte y con quién.",
-        "Es manté contacte amb la tècnica de protecció responsable del cas i s'acorda quina informació escolar es comparteix i amb qui."]},
+        "Coordinació amb els equips de protecció de menors quan l'alumne/a està sota una mesura de protecció (tutela, guarda, acolliment)."]},
   "III.46": {va: "Associacions i ONG",
     x: ["Colaboración con asociaciones (de familias, de discapacidad, de TEA o TDAH, de apoyo a personas migrantes…) y ONG que apoyan al alumno/a o a su familia.",
-        "Col·laboració amb associacions (de famílies, de discapacitat, de TEA o TDAH, de suport a persones migrants…) i ONG que donen suport a l'alumne/a o a la seua família."],
-    e: ["Una asociación del barrio ofrece refuerzo escolar por las tardes; la tutora comparte con su educador los contenidos que se trabajan cada quincena.",
-        "Una associació del barri ofereix reforç escolar per les vesprades; la tutora comparteix amb el seu educador els continguts que es treballen cada quinzena."]},
-  "III.47": {va: "Altres (especificar)",
-    e: ["«Otros: coordinación con el gabinete de logopedia al que asiste por las tardes».",
-        "«Altres: coordinació amb el gabinet de logopèdia on va per les vesprades»."]},
+        "Col·laboració amb associacions (de famílies, de discapacitat, de TEA o TDAH, de suport a persones migrants…) i ONG que donen suport a l'alumne/a o a la seua família."]},
+  "III.47": {va: "Altres (especificar)"},
 
   /* ============ MEDIDAS PERSONALIZADAS PARA LA PARTICIPACIÓN ============ */
   "III.49": {va: "Tutories personalitzades",
     x: ["Seguimiento individual y periódico del alumno/a por parte del tutor/a (u otro docente de referencia) para acompañar su aprendizaje, su organización y su bienestar.",
-        "Seguiment individual i periòdic de l'alumne/a per part del tutor/a (o un altre docent de referència) per a acompanyar el seu aprenentatge, la seua organització i el seu benestar."],
-    e: ["Sesión quincenal de 15 minutos con la tutora para revisar la agenda, planificar las tareas y acordar un objetivo para la quincena.",
-        "Sessió quinzenal de 15 minuts amb la tutora per a revisar l'agenda, planificar les tasques i acordar un objectiu per a la quinzena."]},
+        "Seguiment individual i periòdic de l'alumne/a per part del tutor/a (o un altre docent de referència) per a acompanyar el seu aprenentatge, la seua organització i el seu benestar."]},
   "III.50": {va: "Tutoria entre iguals",
     x: ["Un compañero/a formado actúa como tutor/a o alumno/a ayudante y ofrece apoyo académico o social de forma estructurada.",
-        "Un company/a format actua com a tutor/a o alumne/a ajudant i ofereix suport acadèmic o social de manera estructurada."],
-    e: ["Una compañera de 6º acompaña al alumno/a en el patio dos días por semana y le ayuda a unirse a los juegos; se revisa cada mes con la tutora.",
-        "Una companya de 6é acompanya l'alumne/a al pati dos dies per setmana i l'ajuda a unir-se als jocs; es revisa cada mes amb la tutora."]},
+        "Un company/a format actua com a tutor/a o alumne/a ajudant i ofereix suport acadèmic o social de manera estructurada."]},
   "III.51": {va: "Contracte família - tutor/a",
     x: ["Compromiso escrito entre familia, tutor/a y alumno/a con objetivos concretos, las acciones de cada parte y un seguimiento acordado.",
-        "Compromís escrit entre família, tutor/a i alumne/a amb objectius concrets, les accions de cada part i un seguiment acordat."],
-    e: ["Contrato con tres objetivos (traer el material, leer 15 minutos al día, entregar las tareas); la familia firma la agenda a diario y hay revisión mensual.",
-        "Contracte amb tres objectius (portar el material, llegir 15 minuts al dia, lliurar les tasques); la família signa l'agenda diàriament i hi ha revisió mensual."]},
+        "Compromís escrit entre família, tutor/a i alumne/a amb objectius concrets, les accions de cada part i un seguiment acordat."]},
   "III.52": {va: "Programes per a la millora de la competència emocional",
     x: ["Intervención individual o en pequeño grupo para desarrollar la conciencia y la regulación emocional, la autoestima y las habilidades sociales.",
-        "Intervenció individual o en grup reduït per a desenvolupar la consciència i la regulació emocional, l'autoestima i les habilitats socials."],
-    e: ["Sesión semanal en pequeño grupo con la orientadora: identificar emociones, técnica de la tortuga para calmarse y práctica de cómo pedir ayuda.",
-        "Sessió setmanal en grup reduït amb l'orientadora: identificar emocions, tècnica de la tortuga per a calmar-se i pràctica de com demanar ajuda."]},
+        "Intervenció individual o en grup reduït per a desenvolupar la consciència i la regulació emocional, l'autoestima i les habilitats socials."]},
   "III.53": {va: "Actuacions d'acompanyament personalitzat",
     x: ["Acompañamiento cercano de un adulto de referencia en momentos o situaciones críticas (entradas, cambios, patio, conflictos) para garantizar su participación y su bienestar.",
-        "Acompanyament pròxim d'un adult de referència en moments o situacions crítiques (entrades, canvis, pati, conflictes) per a garantir la seua participació i el seu benestar."],
-    e: ["La educadora recibe al alumno/a cada mañana, repasa con él la agenda del día y es su figura de referencia durante el patio.",
-        "L'educadora rep l'alumne/a cada matí, hi repassa l'agenda del dia i és la seua figura de referència durant el pati."]},
+        "Acompanyament pròxim d'un adult de referència en moments o situacions crítiques (entrades, canvis, pati, conflictes) per a garantir la seua participació i el seu benestar."]},
   "III.54": {va: "Protocol d'acollida amb alumnat nouvingut i desplaçat",
     x: ["Actuaciones para recibir al alumnado que se incorpora tarde, viene de otro país o está desplazado: entrevista con la familia, evaluación inicial, compañero/a guía y plan de acogida.",
-        "Actuacions per a rebre l'alumnat que s'incorpora tard, ve d'un altre país o està desplaçat: entrevista amb la família, avaluació inicial, company/a guia i pla d'acollida."],
-    e: ["Primera semana: visita guiada al centro, compañero/a guía, diccionario visual «de supervivencia» y evaluación inicial de competencias para ajustar los apoyos.",
-        "Primera setmana: visita guiada al centre, company/a guia, diccionari visual «de supervivència» i avaluació inicial de competències per a ajustar els suports."]},
+        "Actuacions per a rebre l'alumnat que s'incorpora tard, ve d'un altre país o està desplaçat: entrevista amb la família, avaluació inicial, company/a guia i pla d'acollida."]},
   "III.55": {va: "Accions per als implicats en situacions d'assetjament",
     x: ["Actuaciones de protección, apoyo y reparación con la víctima e intervención educativa con quien agrede y con los observadores, según el protocolo de acoso escolar.",
-        "Actuacions de protecció, suport i reparació amb la víctima i intervenció educativa amb qui agredeix i amb els observadors, segons el protocol d'assetjament escolar."],
-    e: ["Tras activar el protocolo se refuerza la vigilancia del patio, la víctima tiene un adulto de referencia y quienes agredían participan en un programa de reparación.",
-        "Després d'activar el protocol es reforça la vigilància del pati, la víctima té un adult de referència i qui agredia participa en un programa de reparació."]},
+        "Actuacions de protecció, suport i reparació amb la víctima i intervenció educativa amb qui agredeix i amb els observadors, segons el protocol d'assetjament escolar."]},
   "III.56": {va: "Accions per als implicats en situacions de maltractament infantil",
     x: ["Actuaciones de detección, notificación y protección del alumno/a ante indicios de maltrato, coordinadas con servicios sociales y de protección.",
-        "Actuacions de detecció, notificació i protecció de l'alumne/a davant d'indicis de maltractament, coordinades amb serveis socials i de protecció."],
-    e: ["Ante indicios físicos se cumplimenta la hoja de notificación, se informa a dirección y a servicios sociales y se ofrece al alumno/a un espacio seguro de escucha.",
-        "Davant d'indicis físics s'emplena el full de notificació, s'informa la direcció i els serveis socials i s'ofereix a l'alumne/a un espai segur d'escolta."]},
+        "Actuacions de detecció, notificació i protecció de l'alumne/a davant d'indicis de maltractament, coordinades amb serveis socials i de protecció."]},
   "III.57": {va: "Accions per als implicats en situacions de violència de gènere",
     x: ["Apoyo y protección al alumnado víctima directa o indirecta de violencia de género, e intervención educativa con quien ejerce conductas machistas.",
-        "Suport i protecció a l'alumnat víctima directa o indirecta de violència de gènere, i intervenció educativa amb qui exerceix conductes masclistes."],
-    e: ["La alumna, hija de una víctima, recibe acompañamiento de la orientadora; se coordina con el servicio especializado y se garantiza la confidencialidad de su domicilio.",
-        "L'alumna, filla d'una víctima, rep acompanyament de l'orientadora; es coordina amb el servei especialitzat i es garanteix la confidencialitat del seu domicili."]},
+        "Suport i protecció a l'alumnat víctima directa o indirecta de violència de gènere, i intervenció educativa amb qui exerceix conductes masclistes."]},
   "III.58": {va: "Accions per als implicats en qualsevol altra situació de violència",
     x: ["Actuaciones ante otras formas de violencia (agresiones, ciberacoso, LGTBIfobia, discriminación) que afectan al alumno/a, siguiendo los protocolos vigentes.",
-        "Actuacions davant d'altres formes de violència (agressions, ciberassetjament, LGTBIfòbia, discriminació) que afecten l'alumne/a, seguint els protocols vigents."],
-    e: ["Tras un episodio de insultos homófobos en redes se aplica el protocolo, se protege al alumno/a y el grupo trabaja una sesión sobre respeto a la diversidad.",
-        "Després d'un episodi d'insults homòfobs en xarxes s'aplica el protocol, es protegeix l'alumne/a i el grup treballa una sessió sobre respecte a la diversitat."]},
-  "III.59": {va: "Altres (especificar)",
-    e: ["«Otros: programa de orientación académica y profesional con consejo orientador».",
-        "«Altres: programa d'orientació acadèmica i professional amb consell orientador»."]},
+        "Actuacions davant d'altres formes de violència (agressions, ciberassetjament, LGTBIfòbia, discriminació) que afecten l'alumne/a, seguint els protocols vigents."]},
+  "III.59": {va: "Altres (especificar)"},
 
   /* ================= MEDIDAS DE FLEXIBILIZACIÓN ================= */
   "III.61": {va: "Permanència d'un any més en el mateix curs",
     x: ["Medida excepcional que se adopta tras haber agotado otras medidas y que debe ir acompañada de un plan específico de refuerzo para que el año adicional sea realmente útil.",
-        "Mesura excepcional que s'adopta després d'haver esgotat altres mesures i que ha d'anar acompanyada d'un pla específic de reforç perquè l'any addicional siga realment útil."],
-    e: ["El alumno/a permanece un año más en 2º; su plan incluye refuerzo de lectoescritura con docencia compartida y una revisión trimestral del progreso con la familia.",
-        "L'alumne/a roman un any més en 2n; el seu pla inclou reforç de lectoescriptura amb docència compartida i una revisió trimestral del progrés amb la família."]},
+        "Mesura excepcional que s'adopta després d'haver esgotat altres mesures i que ha d'anar acompanyada d'un pla específic de reforç perquè l'any addicional siga realment útil."]},
 
   /* ================= MEDIDAS DE APRENDIZAJE ================= */
   "III.63": {va: "Adequació personalitzada de les SA de la programació comuna",
@@ -1445,193 +1289,408 @@ window.TEXTOS = Object.assign(window.TEXTOS || {}, {
         "Ajustos en les situacions d'aprenentatge (SA) del grup per a un alumne/a concret, sense modificar de manera significativa els criteris d'avaluació del curs (això seria una ACIS, mesura de nivell IV)."]},
   "III.64": {va: "Productes finals dels projectes",
     x: ["Permitir que el alumno/a realice el producto final del proyecto con otro formato, extensión o grado de complejidad, manteniendo lo esencial.",
-        "Permetre que l'alumne/a faça el producte final del projecte amb un altre format, extensió o grau de complexitat, mantenint l'essencial."],
-    e: ["En lugar de un informe escrito, el alumno/a presenta su investigación sobre los animales con un vídeo de dos minutos y un póster con fotos.",
-        "En lloc d'un informe escrit, l'alumne/a presenta la seua investigació sobre els animals amb un vídeo de dos minuts i un pòster amb fotos."]},
+        "Permetre que l'alumne/a faça el producte final del projecte amb un altre format, extensió o grau de complexitat, mantenint l'essencial."]},
   "III.65": {va: "Metodologia",
     x: ["Ajustar cómo se enseña al alumno/a: más modelado y práctica guiada, instrucciones fragmentadas, apoyos visuales, refuerzo positivo, ubicación en el aula.",
-        "Ajustar com s'ensenya a l'alumne/a: més modelatge i pràctica guiada, instruccions fragmentades, suports visuals, reforç positiu, ubicació a l'aula."],
-    e: ["Se sienta cerca de la docente, recibe las instrucciones de una en una y comprueba que las ha entendido repitiéndolas; cada tarea larga se divide en pasos con autocomprobación.",
-        "S'asseu a prop de la docent, rep les instruccions d'una en una i comprova que les ha enteses repetint-les; cada tasca llarga es divideix en passos amb autocomprovació."]},
+        "Ajustar com s'ensenya a l'alumne/a: més modelatge i pràctica guiada, instruccions fragmentades, suports visuals, reforç positiu, ubicació a l'aula."]},
   "III.66": {va: "Activitats",
     x: ["Ajustar las actividades en cantidad, complejidad, tiempo o tipo de respuesta, manteniendo los mismos aprendizajes esenciales que el grupo.",
-        "Ajustar les activitats en quantitat, complexitat, temps o tipus de resposta, mantenint els mateixos aprenentatges essencials que el grup."],
-    e: ["De los diez problemas resuelve cinco seleccionados con apoyo de material manipulativo, y puede responder de forma oral o con dibujos.",
-        "Dels deu problemes en resol cinc de seleccionats amb suport de material manipulatiu, i pot respondre de manera oral o amb dibuixos."]},
+        "Ajustar les activitats en quantitat, complexitat, temps o tipus de resposta, mantenint els mateixos aprenentatges essencials que el grup."]},
   "III.67": {va: "Materials didàctics",
     x: ["Facilitar materiales complementarios o adaptados (manipulativos, visuales, digitales, en lectura fácil) que permiten al alumno/a seguir la programación común.",
-        "Facilitar materials complementaris o adaptats (manipulatius, visuals, digitals, en lectura fàcil) que permeten a l'alumne/a seguir la programació comuna."],
-    e: ["Dispone de una tabla de multiplicar plastificada, un glosario visual de la unidad y los textos de lectura en versión simplificada.",
-        "Disposa d'una taula de multiplicar plastificada, un glossari visual de la unitat i els textos de lectura en versió simplificada."]},
+        "Facilitar materials complementaris o adaptats (manipulatius, visuals, digitals, en lectura fàcil) que permeten a l'alumne/a seguir la programació comuna."]},
   "III.68": {va: "Proves i instruments d'avaluació",
     x: ["Adaptar el formato y las condiciones de evaluación (tiempo, presentación, lectura de enunciados, tipo de respuesta) para evaluar lo que sabe y no su dificultad.",
-        "Adaptar el format i les condicions d'avaluació (temps, presentació, lectura d'enunciats, tipus de resposta) per a avaluar el que sap i no la seua dificultat."],
-    e: ["Examen con letra grande, una pregunta por cara, enunciados leídos en voz alta, un 30 % más de tiempo y la posibilidad de completar la prueba oralmente.",
-        "Examen amb lletra gran, una pregunta per cara, enunciats llegits en veu alta, un 30 % més de temps i la possibilitat de completar la prova oralment."]},
+        "Adaptar el format i les condicions d'avaluació (temps, presentació, lectura d'enunciats, tipus de resposta) per a avaluar el que sap i no la seua dificultat."]},
   "III.69": {va: "Activitats complementàries",
     x: ["Ajustar las actividades complementarias (salidas, talleres, celebraciones) para que el alumno/a participe y aprenda en ellas: anticipación, un rol adaptado, apoyos.",
-        "Ajustar les activitats complementàries (eixides, tallers, celebracions) perquè l'alumne/a hi participe i hi aprenga: anticipació, un rol adaptat, suports."],
-    e: ["En la obra de teatro de final de trimestre, el alumno/a se encarga del sonido con una tableta, un papel que ensaya con antelación con un guion visual.",
-        "En l'obra de teatre de final de trimestre, l'alumne/a s'encarrega del so amb una tauleta, un paper que assaja amb antelació amb un guió visual."]},
+        "Ajustar les activitats complementàries (eixides, tallers, celebracions) perquè l'alumne/a hi participe i hi aprenga: anticipació, un rol adaptat, suports."]},
   "III.70": {va: "Reforç pedagògic",
     x: ["Apoyo adicional, dentro o fuera del aula, para que el alumno/a consolide los aprendizajes básicos en los que tiene dificultades. Puede ser temporal y debe revisarse periódicamente.",
         "Suport addicional, dins o fora de l'aula, perquè l'alumne/a consolide els aprenentatges bàsics en què té dificultats. Pot ser temporal i s'ha de revisar periòdicament."]},
   "III.71": {va: "Matèries de reforç de lliure configuració autonòmica d'opció (ESO)", et: ["ESO"],
     x: ["En ESO, cursar una materia de libre configuración autonómica orientada al refuerzo de las competencias básicas en lugar de otra optativa.",
-        "En ESO, cursar una matèria de lliure configuració autonòmica orientada al reforç de les competències bàsiques en lloc d'una altra optativa."],
-    e: ["En 1º de ESO cursa la materia de refuerzo de la competencia matemática en lugar de una segunda lengua extranjera.",
-        "En 1r d'ESO cursa la matèria de reforç de la competència matemàtica en lloc d'una segona llengua estrangera."]},
+        "En ESO, cursar una matèria de lliure configuració autonòmica orientada al reforç de les competències bàsiques en lloc d'una altra optativa."]},
   "III.72": {va: "Competència comunicativa oral 1a llengua estrangera - altres",
     x: ["Refuerzo específico de la comunicación oral en la primera lengua extranjera, u otros refuerzos lingüísticos similares.",
-        "Reforç específic de la comunicació oral en la primera llengua estrangera, o altres reforços lingüístics similars."],
-    e: ["Sesión semanal de conversación en inglés en pequeño grupo con el auxiliar de conversación, centrada en vocabulario funcional.",
-        "Sessió setmanal de conversa en anglés en grup reduït amb l'auxiliar de conversa, centrada en vocabulari funcional."]},
+        "Reforç específic de la comunicació oral en la primera llengua estrangera, o altres reforços lingüístics similars."]},
   "III.73": {va: "Reforç en aula comuna amb desdoblaments",
     x: ["El alumno/a recibe refuerzo en un subgrupo reducido cuando su grupo se desdobla, con una atención más individualizada.",
-        "L'alumne/a rep reforç en un subgrup reduït quan el seu grup es desdobla, amb una atenció més individualitzada."],
-    e: ["En las dos sesiones desdobladas de Lengua está en el subgrupo que trabaja la comprensión lectora con textos más cortos y lectura guiada.",
-        "En les dues sessions desdoblades de Llengua està en el subgrup que treballa la comprensió lectora amb textos més curts i lectura guiada."]},
+        "L'alumne/a rep reforç en un subgrup reduït quan el seu grup es desdobla, amb una atenció més individualitzada."]},
   "III.74": {va: "Reforç en aula comuna amb docència compartida",
     x: ["Un segundo docente (PT, AL o de refuerzo) apoya al alumno/a dentro de su aula, sin sacarlo del grupo, en las sesiones acordadas.",
-        "Un segon docent (PT, AL o de reforç) dona suport a l'alumne/a dins de la seua aula, sense traure'l del grup, en les sessions acordades."],
-    e: ["Tres sesiones semanales de Matemáticas con la maestra de PT dentro del aula, que guía al alumno/a y a su equipo en la resolución de problemas.",
-        "Tres sessions setmanals de Matemàtiques amb la mestra de PT dins de l'aula, que guia l'alumne/a i el seu equip en la resolució de problemes."]},
+        "Un segon docent (PT, AL o de reforç) dona suport a l'alumne/a dins de la seua aula, sense traure'l del grup, en les sessions acordades."]},
   "III.75": {va: "Grups específics de reforç en horari lectiu",
     x: ["Pequeño grupo de refuerzo fuera del aula ordinaria y en horario lectivo, de duración limitada y con objetivos concretos.",
-        "Grup reduït de reforç fora de l'aula ordinària i en horari lectiu, de durada limitada i amb objectius concrets."],
-    e: ["Grupo de cuatro alumnos/as que sale dos sesiones semanales durante el primer trimestre para trabajar la lectura con un programa de fluidez.",
-        "Grup de quatre alumnes que ix dues sessions setmanals durant el primer trimestre per a treballar la lectura amb un programa de fluïdesa."]},
+        "Grup reduït de reforç fora de l'aula ordinària i en horari lectiu, de durada limitada i amb objectius concrets."]},
   "III.76": {va: "Activitats de reforç per a superar matèries pendents (ESO)", et: ["ESO"],
     x: ["Plan de actividades y seguimiento para que el alumno/a de ESO recupere las materias no superadas de cursos anteriores.",
-        "Pla d'activitats i seguiment perquè l'alumne/a d'ESO recupere les matèries no superades de cursos anteriors."],
-    e: ["Cuaderno de actividades de Matemáticas de 1º con entregas mensuales y una tutoría quincenal con el profesor de la materia.",
-        "Quadern d'activitats de Matemàtiques de 1r amb lliuraments mensuals i una tutoria quinzenal amb el professor de la matèria."]},
+        "Pla d'activitats i seguiment perquè l'alumne/a d'ESO recupere les matèries no superades de cursos anteriors."]},
   "III.77": {va: "Activitats de reforç del Fons Social Europeu",
     x: ["Programas de refuerzo cofinanciados por el Fondo Social Europeo (por ejemplo, acompañamiento escolar fuera del horario lectivo) para alumnado con dificultades o en desventaja.",
-        "Programes de reforç cofinançats pel Fons Social Europeu (per exemple, acompanyament escolar fora de l'horari lectiu) per a alumnat amb dificultats o en desavantatge."],
-    e: ["El alumno/a asiste dos tardes por semana al programa de acompañamiento escolar del centro, donde un docente le ayuda con las tareas y las técnicas de estudio.",
-        "L'alumne/a assisteix dues vesprades per setmana al programa d'acompanyament escolar del centre, on un docent l'ajuda amb les tasques i les tècniques d'estudi."]},
+        "Programes de reforç cofinançats pel Fons Social Europeu (per exemple, acompanyament escolar fora de l'horari lectiu) per a alumnat amb dificultats o en desavantatge."]},
   "III.78": {va: "Tallers de reforç",
     x: ["Talleres prácticos en pequeño grupo para afianzar los aprendizajes instrumentales de forma más funcional y motivadora.",
-        "Tallers pràctics en grup reduït per a afermar els aprenentatges instrumentals de manera més funcional i motivadora."],
-    e: ["Taller semanal de «matemáticas en la tienda»: el alumno/a practica el cálculo y el uso del dinero con precios reales y juego de roles.",
-        "Taller setmanal de «matemàtiques a la botiga»: l'alumne/a practica el càlcul i l'ús dels diners amb preus reals i joc de rols."]},
+        "Tallers pràctics en grup reduït per a afermar els aprenentatges instrumentals de manera més funcional i motivadora."]},
   "III.79": {va: "Tallers d'ampliació",
     x: ["Talleres para profundizar o enriquecer los aprendizajes del alumnado con alto rendimiento o con especial interés en un ámbito.",
-        "Tallers per a aprofundir o enriquir els aprenentatges de l'alumnat amb alt rendiment o amb especial interés en un àmbit."],
-    e: ["Taller quincenal de robótica e investigación en el que el alumno/a diseña un pequeño proyecto científico y lo presenta al resto del centro.",
-        "Taller quinzenal de robòtica i investigació en què l'alumne/a dissenya un petit projecte científic i el presenta a la resta del centre."]},
-  "III.80": {va: "Altres (especificar)",
-    e: ["«Otros: programa de entrenamiento de funciones ejecutivas en pequeño grupo».",
-        "«Altres: programa d'entrenament de funcions executives en grup reduït»."]},
+        "Tallers per a aprofundir o enriquir els aprenentatges de l'alumnat amb alt rendiment o amb especial interés en un àmbit."]},
+  "III.80": {va: "Altres (especificar)"},
   "III.81": {va: "Activitats per a l'ensenyament intensiu de les llengües oficials de la CV",
     x: ["Programas intensivos para el alumnado recién llegado al sistema educativo valenciano que desconoce una o las dos lenguas oficiales, para facilitar su incorporación al currículo.",
         "Programes intensius per a l'alumnat nouvingut al sistema educatiu valencià que desconeix una o les dues llengües oficials, per a facilitar-ne la incorporació al currículum."]},
   "III.82": {va: "Ensenyament intensiu de valencià",
     x: ["El alumno/a que conoce el castellano pero no el valenciano recibe sesiones intensivas de valenciano para acceder al currículo en esta lengua.",
-        "L'alumne/a que coneix el castellà però no el valencià rep sessions intensives de valencià per a accedir al currículum en aquesta llengua."],
-    e: ["Alumno/a llegado de otra comunidad en 4º de Primaria: tres sesiones semanales de valenciano oral y lectura en pequeño grupo durante el primer trimestre.",
-        "Alumne/a arribat d'una altra comunitat en 4t de Primària: tres sessions setmanals de valencià oral i lectura en grup reduït durant el primer trimestre."]},
+        "L'alumne/a que coneix el castellà però no el valencià rep sessions intensives de valencià per a accedir al currículum en aquesta llengua."]},
   "III.83": {va: "Ensenyament intensiu de valencià i castellà",
     x: ["Para el alumnado que no conoce ninguna de las dos lenguas oficiales: inmersión lingüística intensiva y apoyo para incorporarse progresivamente al aula.",
-        "Per a l'alumnat que no coneix cap de les dues llengües oficials: immersió lingüística intensiva i suport per a incorporar-se progressivament a l'aula."],
-    e: ["Alumna llegada de Ucrania: sesiones diarias de lengua con vocabulario básico y de supervivencia escolar, y participación en Plástica, Música y Educación Física con su grupo.",
-        "Alumna arribada d'Ucraïna: sessions diàries de llengua amb vocabulari bàsic i de supervivència escolar, i participació en Plàstica, Música i Educació Física amb el seu grup."]},
+        "Per a l'alumnat que no coneix cap de les dues llengües oficials: immersió lingüística intensiva i suport per a incorporar-se progressivament a l'aula."]},
   "III.84": {va: "Actuacions per a l'alumnat esportista d'alt nivell, alt rendiment o elit",
     x: ["Medidas para compatibilizar los estudios con la práctica deportiva del alumnado reconocido oficialmente como deportista de alto nivel, alto rendimiento o élite.",
         "Mesures per a compatibilitzar els estudis amb la pràctica esportiva de l'alumnat reconegut oficialment com a esportista d'alt nivell, alt rendiment o elit."]},
   "III.85": {va: "Elecció d'horari", et: ["ESO", "BACH", "FP"],
     x: ["Prioridad para elegir un turno u horario compatible con los entrenamientos.",
-        "Prioritat per a triar un torn o horari compatible amb els entrenaments."],
-    e: ["La alumna, nadadora de alto rendimiento, se matricula en el grupo con horario de mañana para poder entrenar por la tarde.",
-        "L'alumna, nedadora d'alt rendiment, es matricula en el grup amb horari de matí per a poder entrenar per la vesprada."]},
+        "Prioritat per a triar un torn o horari compatible amb els entrenaments."]},
   "III.86": {va: "Elecció de grup", et: ["ESO", "BACH", "FP"],
     x: ["Asignación preferente al grupo cuyo horario o composición facilita la conciliación con la actividad deportiva.",
-        "Assignació preferent al grup l'horari o la composició del qual facilita la conciliació amb l'activitat esportiva."],
-    e: ["Se asigna al alumno/a al grupo B, que termina a las 14:00 los viernes, día en que viaja a las competiciones.",
-        "S'assigna l'alumne/a al grup B, que acaba a les 14.00 els divendres, dia en què viatja a les competicions."]},
+        "Assignació preferent al grup l'horari o la composició del qual facilita la conciliació amb l'activitat esportiva."]},
   "III.87": {va: "Justificació de faltes d'assistència (fins al 25%)", et: ["ESO", "BACH", "FP"],
     x: ["Posibilidad de justificar ausencias por entrenamientos y competiciones hasta el límite establecido, con un plan para recuperar los aprendizajes.",
-        "Possibilitat de justificar absències per entrenaments i competicions fins al límit establit, amb un pla per a recuperar els aprenentatges."],
-    e: ["Las faltas por concentraciones con la selección se justifican con el certificado de la federación y el alumno/a recibe las tareas por la plataforma del centro.",
-        "Les faltes per concentracions amb la selecció es justifiquen amb el certificat de la federació i l'alumne/a rep les tasques per la plataforma del centre."]},
+        "Possibilitat de justificar absències per entrenaments i competicions fins al límit establit, amb un pla per a recuperar els aprenentatges."]},
   "III.88": {va: "Modificació de dates de proves d'avaluació", et: ["ESO", "BACH", "FP"],
     x: ["Cambiar la fecha de los exámenes o pruebas que coinciden con competiciones oficiales.",
-        "Canviar la data dels exàmens o proves que coincideixen amb competicions oficials."],
-    e: ["El examen de Física de la semana del campeonato de España se realiza el lunes siguiente.",
-        "L'examen de Física de la setmana del campionat d'Espanya es fa el dilluns següent."]},
+        "Canviar la data dels exàmens o proves que coincideixen amb competicions oficials."]},
   "III.89": {va: "Grup específic d'esportistes d'alt nivell, elit o personal tècnic", et: ["ESO", "BACH", "FP"],
     x: ["Agrupamiento específico, en los centros que lo tienen autorizado, para el alumnado deportista, con horario adaptado.",
-        "Agrupament específic, en els centres que el tenen autoritzat, per a l'alumnat esportista, amb horari adaptat."],
-    e: ["El centro, vinculado a un centro de tecnificación deportiva, tiene un grupo de 3º de ESO con horario concentrado para deportistas.",
-        "El centre, vinculat a un centre de tecnificació esportiva, té un grup de 3r d'ESO amb horari concentrat per a esportistes."]},
-  "III.90": {va: "Altres (especificar)", et: ["ESO", "BACH", "FP"],
-    e: ["«Otros: entrega de materiales y tareas por la plataforma durante las concentraciones».",
-        "«Altres: lliurament de materials i tasques per la plataforma durant les concentracions»."]},
+        "Agrupament específic, en els centres que el tenen autoritzat, per a l'alumnat esportista, amb horari adaptat."]},
+  "III.90": {va: "Altres (especificar)", et: ["ESO", "BACH", "FP"]},
   "III.91": {va: "Actuacions alumnat d'ensenyaments professionals de Música i/o Dansa",
     x: ["Medidas para compatibilizar la ESO o el Bachillerato con los estudios profesionales de un conservatorio.",
         "Mesures per a compatibilitzar l'ESO o el Batxillerat amb els estudis professionals d'un conservatori."]},
   "III.92": {va: "Coordinació horària", et: ["ESO", "BACH"],
     x: ["Coordinar los horarios del centro y del conservatorio, incluidas las convalidaciones o exenciones de materias que prevé la normativa.",
-        "Coordinar els horaris del centre i del conservatori, incloses les convalidacions o exempcions de matèries que preveu la normativa."],
-    e: ["Se coordina con el conservatorio el horario del alumno/a, se tramita la convalidación de Música y sale antes los martes para llegar a la clase de instrumento.",
-        "Es coordina amb el conservatori l'horari de l'alumne/a, es tramita la convalidació de Música i ix abans els dimarts per a arribar a la classe d'instrument."]},
+        "Coordinar els horaris del centre i del conservatori, incloses les convalidacions o exempcions de matèries que preveu la normativa."]},
   "III.93": {va: "Matrícula parcial en Batxillerat per estudis professionals", et: ["BACH"],
     x: ["Posibilidad de matricularse solo de una parte de las materias de Bachillerato para compatibilizarlo con las enseñanzas profesionales de Música o Danza.",
-        "Possibilitat de matricular-se només d'una part de les matèries de Batxillerat per a compatibilitzar-lo amb els ensenyaments professionals de Música o Dansa."],
-    e: ["La alumna, en 5º de Danza, se matricula en 1º de Bachillerato de las materias comunes y cursa las de modalidad el año siguiente.",
-        "L'alumna, en 5é de Dansa, es matricula en 1r de Batxillerat de les matèries comunes i cursa les de modalitat l'any següent."]},
-  "III.94": {va: "Altres (especificar)", et: ["ESO", "BACH"],
-    e: ["«Otros: exención de Educación Física según la normativa para alumnado de Danza».",
-        "«Altres: exempció d'Educació Física segons la normativa per a alumnat de Dansa»."]},
+        "Possibilitat de matricular-se només d'una part de les matèries de Batxillerat per a compatibilitzar-lo amb els ensenyaments professionals de Música o Dansa."]},
+  "III.94": {va: "Altres (especificar)", et: ["ESO", "BACH"]},
   "III.95": {va: "Itinerari formatiu personalitzat (Formació de Persones Adultes)", et: ["FPA"],
     x: ["En Formación de Personas Adultas, plan de estudios adaptado a la situación, el ritmo y los objetivos de la persona (laborales, familiares, de acreditación).",
-        "En Formació de Persones Adultes, pla d'estudis adaptat a la situació, el ritme i els objectius de la persona (laborals, familiars, d'acreditació)."],
-    e: ["Un alumno de 19 años compagina el trabajo con el Graduado en ESO: cursa dos módulos por cuatrimestre con tutorías semipresenciales.",
-        "Un alumne de 19 anys compagina el treball amb el Graduat en ESO: cursa dos mòduls per quadrimestre amb tutories semipresencials."]},
+        "En Formació de Persones Adultes, pla d'estudis adaptat a la situació, el ritme i els objectius de la persona (laborals, familiars, d'acreditació)."]},
   "III.96": {va: "Itinerari formatiu personalitzat (Formació Professional)", et: ["FP"],
     x: ["En FP, itinerario adaptado (matrícula parcial, distribución de módulos, adaptaciones en la formación en empresa) para que el alumno/a pueda completar el ciclo.",
-        "En FP, itinerari adaptat (matrícula parcial, distribució de mòduls, adaptacions en la formació en empresa) perquè l'alumne/a puga completar el cicle."],
-    e: ["Una alumna con discapacidad motriz distribuye el ciclo en tres cursos y realiza la formación en empresa en un puesto adaptado.",
-        "Una alumna amb discapacitat motriu distribueix el cicle en tres cursos i fa la formació en empresa en un lloc adaptat."]},
-  "III.97": {va: "Altres (especificar)",
-    e: ["«Otros: preparación de la prueba de acceso a ciclos formativos».",
-        "«Altres: preparació de la prova d'accés a cicles formatius»."]},
+        "En FP, itinerari adaptat (matrícula parcial, distribució de mòduls, adaptacions en la formació en empresa) perquè l'alumne/a puga completar el cicle."]},
+  "III.97": {va: "Altres (especificar)"},
 
   /* ======= MEDIDAS PERSONALIZADAS PARA LA COMPENSACIÓN DE DESIGUALDADES ======= */
   "III.99": {va: "Accions transversals d'educació intercultural amb el grup classe",
     x: ["Actuaciones con el grupo pensadas para favorecer la inclusión de un alumno/a de otra cultura, valorando su lengua y su identidad y previniendo la discriminación.",
-        "Actuacions amb el grup pensades per a afavorir la inclusió d'un alumne/a d'una altra cultura, valorant la seua llengua i la seua identitat i previnguent la discriminació."],
-    e: ["El alumno/a, recién llegado de Marruecos, enseña al grupo a saludar en árabe y en la biblioteca de aula se incluyen cuentos de su cultura.",
-        "L'alumne/a, nouvingut del Marroc, ensenya al grup a saludar en àrab i en la biblioteca d'aula s'inclouen contes de la seua cultura."]},
+        "Actuacions amb el grup pensades per a afavorir la inclusió d'un alumne/a d'una altra cultura, valorant la seua llengua i la seua identitat i previnguent la discriminació."]},
   "III.100": {va: "Suport personalitzat davant de situacions de desigualtat i desavantatge",
     x: ["Actuaciones individuales para compensar situaciones sociales, económicas o familiares que dificultan el acceso, la permanencia o el progreso escolar.",
         "Actuacions individuals per a compensar situacions socials, econòmiques o familiars que dificulten l'accés, la permanència o el progrés escolar."]},
   "III.101": {va: "Programa d'hàbits bàsics d'higiene, alimentació i vida saludable",
     x: ["Programa individual para adquirir hábitos de autonomía personal y salud cuando el entorno familiar no los garantiza.",
-        "Programa individual per a adquirir hàbits d'autonomia personal i salut quan l'entorn familiar no els garanteix."],
-    e: ["El alumno/a tiene un neceser en el centro, se lava las manos y los dientes después de comer con la educadora y registra su progreso en una tabla de logros.",
-        "L'alumne/a té un necesser al centre, es renta les mans i les dents després de dinar amb l'educadora i registra el seu progrés en una taula d'assoliments."]},
+        "Programa individual per a adquirir hàbits d'autonomia personal i salut quan l'entorn familiar no els garanteix."]},
   "III.102": {va: "Notificació d'una possible situació de desprotecció detectada",
     x: ["Comunicación a los servicios sociales de indicadores de una posible desprotección (negligencia, maltrato) mediante la hoja de notificación establecida.",
-        "Comunicació als serveis socials d'indicadors d'una possible desprotecció (negligència, maltractament) mitjançant el full de notificació establit."],
-    e: ["Ante faltas reiteradas de higiene, hambre y cansancio, la tutora y la dirección cumplimentan la hoja de notificación y la envían a servicios sociales.",
-        "Davant de faltes reiterades d'higiene, fam i cansament, la tutora i la direcció emplenen el full de notificació i l'envien als serveis socials."]},
+        "Comunicació als serveis socials d'indicadors d'una possible desprotecció (negligència, maltractament) mitjançant el full de notificació establit."]},
   "III.103": {va: "Actuacions en situació d'acolliment (institucional o familiar)",
     x: ["Atención al alumnado en acogimiento residencial o familiar: coordinación con educadores o con la familia acogedora, cuidado de la información y acompañamiento emocional.",
-        "Atenció a l'alumnat en acolliment residencial o familiar: coordinació amb educadors o amb la família acollidora, cura de la informació i acompanyament emocional."],
-    e: ["Se acuerda con el centro de menores quién recoge al alumno/a y firma las autorizaciones; en tutoría se adapta la actividad del árbol genealógico.",
-        "S'acorda amb el centre de menors qui recull l'alumne/a i signa les autoritzacions; en tutoria s'adapta l'activitat de l'arbre genealògic."]},
+        "Atenció a l'alumnat en acolliment residencial o familiar: coordinació amb educadors o amb la família acollidora, cura de la informació i acompanyament emocional."]},
   "III.104": {va: "Actuacions específiques en situació d'absentisme",
     x: ["Actuaciones individualizadas cuando el alumno/a falta de forma reiterada: entrevistas con la familia, compromisos y derivación a la comisión municipal de absentismo.",
-        "Actuacions individualitzades quan l'alumne/a falta de manera reiterada: entrevistes amb la família, compromisos i derivació a la comissió municipal d'absentisme."],
-    e: ["Tras un mes con un 30 % de faltas se cita a la familia y se firma un compromiso de asistencia; como no mejora, el caso se deriva a la comisión de absentismo.",
-        "Després d'un mes amb un 30 % de faltes es cita la família i se signa un compromís d'assistència; com que no millora, el cas es deriva a la comissió d'absentisme."]},
+        "Actuacions individualitzades quan l'alumne/a falta de manera reiterada: entrevistes amb la família, compromisos i derivació a la comissió municipal d'absentisme."]},
   "III.105": {va: "Actuacions d'orientació per a prevenir l'abandonament sense titulació",
     x: ["Orientación académica y profesional personalizada para el alumnado en riesgo de abandonar sin titular: programas específicos, itinerarios alternativos, conexión con la FP.",
-        "Orientació acadèmica i professional personalitzada per a l'alumnat en risc d'abandonar sense titular: programes específics, itineraris alternatius, connexió amb l'FP."],
-    e: ["Entrevistas de orientación con el alumno de 3º de ESO y su familia, visita a un centro de FP y valoración de su incorporación a un programa de diversificación curricular.",
-        "Entrevistes d'orientació amb l'alumne de 3r d'ESO i la seua família, visita a un centre d'FP i valoració de la seua incorporació a un programa de diversificació curricular."]}
+        "Orientació acadèmica i professional personalitzada per a l'alumnat en risc d'abandonar sense titular: programes específics, itineraris alternatius, connexió amb l'FP."]}
+});
+
+</script>
+<script>
+/* Ejemplos de aplicación de las medidas de NIVEL II: [castellano, valenciano].
+   Criterio: ejemplos genéricos, aplicables en cualquier etapa (Infantil a FP y
+   personas adultas), que describen cómo se concreta la medida inclusiva sin
+   referirse a contenidos, áreas ni propuestas didácticas concretas. Sirven también
+   como base para la descripción de la medida («Usar el ejemplo como base»). */
+window.EJEMPLOS = Object.assign(window.EJEMPLOS || {}, {
+  /* ---------- MEDIDAS DE ACCESO ---------- */
+  "II.7": ["Los materiales de uso común del grupo se preparan en formato accesible desde el principio: tipografía clara, contraste suficiente, instrucciones breves con apoyo visual y versión digital para que cada alumno/a pueda ampliarla o escucharla.",
+           "Els materials d'ús comú del grup es preparen en format accessible des del principi: tipografia clara, contrast suficient, instruccions breus amb suport visual i versió digital perquè cada alumne/a la puga ampliar o escoltar."],
+  "II.8": ["El profesorado alterna de forma planificada el trabajo individual, en parejas, en pequeño grupo heterogéneo y en gran grupo según el objetivo de cada actividad, y revisa periódicamente la composición de los grupos para favorecer la ayuda entre iguales.",
+           "El professorat alterna de manera planificada el treball individual, en parelles, en grup reduït heterogeni i en gran grup segons l'objectiu de cada activitat, i revisa periòdicament la composició dels grups per a afavorir l'ajuda entre iguals."],
+  "II.9": ["Al iniciar cada unidad o proyecto se exploran los conocimientos previos del grupo y se vinculan los aprendizajes con situaciones reales del entorno, de la vida cotidiana o de los intereses del alumnado.",
+           "En iniciar cada unitat o projecte s'exploren els coneixements previs del grup i es vinculen els aprenentatges amb situacions reals de l'entorn, de la vida quotidiana o dels interessos de l'alumnat."],
+  "II.10": ["El aula se organiza en espacios con propuestas de distinto nivel de dificultad y materiales accesibles, por los que el alumnado rota con autonomía siguiendo un sistema visual de planificación y registro.",
+            "L'aula s'organitza en espais amb propostes de diferent nivell de dificultat i materials accessibles, per on l'alumnat rota amb autonomia seguint un sistema visual de planificació i registre."],
+  "II.11": ["El profesorado presenta la información clave por más de una vía (oral, escrita, visual o manipulativa), ofrece distintas formas de participar y permite demostrar lo aprendido con diferentes formatos de respuesta.",
+            "El professorat presenta la informació clau per més d'una via (oral, escrita, visual o manipulativa), ofereix diferents maneres de participar i permet demostrar el que s'ha aprés amb diferents formats de resposta."],
+  "II.12": ["Los materiales del grupo están disponibles también en formato digital, y el alumnado puede usar herramientas como lectores de texto, dictado por voz, ampliación de pantalla o subtítulos según sus necesidades.",
+            "Els materials del grup també estan disponibles en format digital, i l'alumnat pot usar eines com ara lectors de text, dictat per veu, ampliació de pantalla o subtítols segons les seues necessitats."],
+  "II.13": ["El tutor o la tutora registra diariamente la asistencia y la puntualidad, revisa las ausencias cada semana y contacta con la familia ante faltas reiteradas o sin justificar, según el procedimiento del centro.",
+            "El tutor o la tutora registra diàriament l'assistència i la puntualitat, revisa les absències cada setmana i contacta amb la família davant de faltes reiterades o sense justificar, segons el procediment del centre."],
+  "II.14": ["Las comunicaciones del centro se envían por más de un canal, con lenguaje claro y, cuando hace falta, traducidas o en lectura fácil; las informaciones importantes se explican también de forma presencial.",
+            "Les comunicacions del centre s'envien per més d'un canal, amb llenguatge clar i, quan cal, traduïdes o en lectura fàcil; les informacions importants també s'expliquen de manera presencial."],
+  "II.15": ["«Otros: anticipación visual de la secuencia de actividades de cada sesión».",
+            "«Altres: anticipació visual de la seqüència d'activitats de cada sessió»."],
+
+  /* ---------- MEDIDAS DE APRENDIZAJE ---------- */
+  "II.17": ["Cada unidad o proyecto incluye desde su diseño actividades de refuerzo y de ampliación, y criterios para decidir quién las realiza, de modo que todo el alumnado trabaja los mismos aprendizajes esenciales.",
+            "Cada unitat o projecte inclou des del seu disseny activitats de reforç i d'ampliació, i criteris per a decidir qui les fa, de manera que tot l'alumnat treballa els mateixos aprenentatges essencials."],
+  "II.18": ["Se trabaja en equipos heterogéneos estables con roles rotativos (coordinación, portavoz, secretaría, material) y, en cada tarea, se combina una aportación individual con un producto común del equipo.",
+            "Es treballa en equips heterogenis estables amb rols rotatius (coordinació, portaveu, secretaria, material) i, en cada tasca, es combina una aportació individual amb un producte comú de l'equip."],
+  "II.19": ["Dos docentes planifican juntos y comparten el aula en las sesiones acordadas: mientras uno conduce la actividad, el otro acompaña a los equipos o al alumnado que más lo necesita, y alternan los papeles.",
+            "Dos docents planifiquen junts i comparteixen l'aula en les sessions acordades: mentre un condueix l'activitat, l'altre acompanya els equips o l'alumnat que més ho necessita, i alternen els papers."],
+  "II.20": ["El aprendizaje se organiza en proyectos con un reto real y un producto final, en los que cada alumno/a asume una tarea ajustada a sus capacidades e intereses, con hitos de seguimiento y evaluación compartida.",
+            "L'aprenentatge s'organitza en projectes amb un repte real i un producte final, en què cada alumne/a assumeix una tasca ajustada a les seues capacitats i interessos, amb fites de seguiment i avaluació compartida."],
+  "II.21": ["En algunas sesiones el grupo rota por varias estaciones con actividades diferentes y tiempos fijos; en una de ellas el docente atiende directamente a un pequeño grupo para reforzar o ampliar.",
+            "En algunes sessions el grup rota per diverses estacions amb activitats diferents i temps fixos; en una d'elles el docent atén directament un grup reduït per a reforçar o ampliar."],
+  "II.22": ["Las tareas se plantean con varios niveles de complejidad y de apoyo sobre los mismos aprendizajes, de manera que cada alumno/a avanza a su ritmo y todo el grupo comparte la puesta en común final.",
+            "Les tasques es plantegen amb diversos nivells de complexitat i de suport sobre els mateixos aprenentatges, de manera que cada alumne/a avança al seu ritme i tot el grup comparteix la posada en comú final."],
+  "II.23": ["Se forman parejas estables o rotativas para practicar, revisar y resolver dudas de forma regular, con pautas claras sobre cómo ayudar sin dar la respuesta y con intercambio de papeles.",
+            "Es formen parelles estables o rotatives per a practicar, revisar i resoldre dubtes de manera regular, amb pautes clares sobre com ajudar sense donar la resposta i amb intercanvi de papers."],
+  "II.24": ["Periódicamente el aula se organiza en grupos heterogéneos dinamizados por personas adultas (familiares, voluntariado u otros profesionales) que promueven el diálogo y la ayuda mutua.",
+            "Periòdicament l'aula s'organitza en grups heterogenis dinamitzats per persones adultes (familiars, voluntariat o altres professionals) que promouen el diàleg i l'ajuda mútua."],
+  "II.25": ["Con todo el grupo se aplica de forma sistemática un programa breve para estimular habilidades básicas (atención, memoria, planificación, lenguaje) y se registra el progreso para detectar pronto a quien necesita más apoyo.",
+            "Amb tot el grup s'aplica de manera sistemàtica un programa breu per a estimular habilitats bàsiques (atenció, memòria, planificació, llenguatge) i es registra el progrés per a detectar prompte qui necessita més suport."],
+  "II.26": ["En determinadas sesiones el grupo se divide en dos subgrupos atendidos por dos docentes, lo que permite una atención más individualizada y más oportunidades de participación.",
+            "En determinades sessions el grup es divideix en dos subgrups atesos per dos docents, cosa que permet una atenció més individualitzada i més oportunitats de participació."],
+  "II.27": ["El alumnado dispone con antelación de materiales breves y accesibles para preparar la sesión, y el tiempo de clase se dedica a la práctica guiada, a resolver dudas y a apoyar a quien no los ha podido revisar.",
+            "L'alumnat disposa amb antelació de materials breus i accessibles per a preparar la sessió, i el temps de classe es dedica a la pràctica guiada, a resoldre dubtes i a ajudar qui no els ha pogut revisar."],
+  "II.28": ["Se programan talleres prácticos y manipulativos en los que los aprendizajes se aplican a situaciones funcionales y cada alumno/a participa con un papel adaptado a sus posibilidades.",
+            "Es programen tallers pràctics i manipulatius en què els aprenentatges s'apliquen a situacions funcionals i cada alumne/a hi participa amb un paper adaptat a les seues possibilitats."],
+  "II.29": ["El aula se organiza en equipos de base estables durante un periodo, con normas y responsabilidades compartidas y un momento periódico para que cada equipo valore su funcionamiento y acuerde mejoras.",
+            "L'aula s'organitza en equips de base estables durant un període, amb normes i responsabilitats compartides i un moment periòdic perquè cada equip valore el seu funcionament i acorde millores."],
+  "II.30": ["El grupo diseña y desarrolla un servicio a la comunidad vinculado a los aprendizajes del curso, en el que todo el alumnado participa con tareas diversas y reflexiona después sobre lo aprendido.",
+            "El grup dissenya i desenvolupa un servei a la comunitat vinculat als aprenentatges del curs, en què tot l'alumnat participa amb tasques diverses i reflexiona després sobre el que ha aprés."],
+  "II.31": ["El profesorado enseña de forma explícita y practica con el grupo estrategias para planificar, autorregularse y revisar el propio trabajo (guiones de pasos, listas de comprobación, rutinas de reflexión), y las retoma en todas las áreas.",
+            "El professorat ensenya de manera explícita i practica amb el grup estratègies per a planificar, autoregular-se i revisar el propi treball (guions de passos, llistes de comprovació, rutines de reflexió), i les reprén en totes les àrees."],
+  "II.32": ["Los criterios de evaluación se comparten desde el inicio con instrumentos comprensibles (rúbricas, listas de control) y se combinan la autoevaluación, la coevaluación y distintos formatos para demostrar lo aprendido.",
+            "Els criteris d'avaluació es comparteixen des de l'inici amb instruments comprensibles (rúbriques, llistes de control) i es combinen l'autoavaluació, la coavaluació i diferents formats per a demostrar el que s'ha aprés."],
+  "II.33": ["Varias áreas o materias afines se agrupan en un ámbito impartido por un mismo docente, lo que reduce el número de profesorado de referencia y facilita un enfoque globalizado y un seguimiento más cercano.",
+            "Diverses àrees o matèries afins s'agrupen en un àmbit impartit per un mateix docent, cosa que redueix el nombre de professorat de referència i facilita un enfocament globalitzat i un seguiment més pròxim."],
+  "II.34": ["«Otros: banco de actividades de distintos niveles para el trabajo autónomo».",
+            "«Altres: banc d'activitats de diferents nivells per al treball autònom»."],
+
+  /* ---------- MEDIDAS DE PARTICIPACIÓN ---------- */
+  "II.36": ["En el plan de acción tutorial se reservan sesiones periódicas con el grupo para trabajar la convivencia, la igualdad, la gestión de conflictos y la educación emocional, con dinámicas adaptadas a la edad.",
+            "En el pla d'acció tutorial es reserven sessions periòdiques amb el grup per a treballar la convivència, la igualtat, la gestió de conflictes i l'educació emocional, amb dinàmiques adaptades a l'edat."],
+  "II.37": ["El grupo participa en un programa de convivencia del centro en el que el alumnado asume un papel activo (alumnado ayudante, mediación, delegados) en la prevención del acoso y el cuidado de las relaciones.",
+            "El grup participa en un programa de convivència del centre en què l'alumnat assumeix un paper actiu (alumnat ajudant, mediació, delegats) en la prevenció de l'assetjament i la cura de les relacions."],
+  "II.38": ["Se realizan actividades periódicas para detectar y cuestionar estereotipos y prejuicios, y se revisa que los materiales, los ejemplos y el lenguaje del aula sean igualitarios e inclusivos.",
+            "Es fan activitats periòdiques per a detectar i qüestionar estereotips i prejudicis, i es revisa que els materials, els exemples i el llenguatge de l'aula siguen igualitaris i inclusius."],
+  "II.39": ["Antes de la incorporación de un compañero/a o cuando surge la necesidad, se trabaja con el grupo el respeto a las diferencias y cómo ayudar de forma adecuada, contando con la familia y con el propio alumno/a si lo desean.",
+            "Abans de la incorporació d'un company/a o quan sorgeix la necessitat, es treballa amb el grup el respecte a les diferències i com ajudar de manera adequada, comptant amb la família i amb el mateix alumne/a si ho volen."],
+  "II.40": ["Dos veces por curso se aplica un sociograma o un cuestionario de clima del aula; los resultados se analizan con orientación y se usan para formar grupos y actuar ante situaciones de aislamiento o rechazo.",
+            "Dues vegades per curs s'aplica un sociograma o un qüestionari de clima d'aula; els resultats s'analitzen amb orientació i s'usen per a formar grups i actuar davant de situacions d'aïllament o rebuig."],
+  "II.41": ["El grupo dispone de un sistema de responsabilidades rotativas en el aula y en los equipos, de modo que todo el alumnado asume periódicamente tareas significativas y valoradas por los demás.",
+            "El grup disposa d'un sistema de responsabilitats rotatives a l'aula i en els equips, de manera que tot l'alumnat assumeix periòdicament tasques significatives i valorades per la resta."],
+  "II.42": ["El grupo celebra asambleas periódicas con turnos de palabra regulados para compartir, proponer mejoras, tomar decisiones y resolver conflictos de forma dialogada.",
+            "El grup celebra assemblees periòdiques amb torns de paraula regulats per a compartir, proposar millores, prendre decisions i resoldre conflictes de manera dialogada."],
+  "II.43": ["En los trabajos en grupo las tareas se reparten de forma explícita y equilibrada, teniendo en cuenta las capacidades e intereses de cada miembro, y el docente comprueba que todos participan.",
+            "En els treballs en grup les tasques es reparteixen de manera explícita i equilibrada, tenint en compte les capacitats i els interessos de cada membre, i el docent comprova que tots hi participen."],
+  "II.44": ["Se realizan de forma regular dinámicas de cohesión y conocimiento mutuo, especialmente al inicio de curso y tras nuevas incorporaciones, para crear un clima de confianza y pertenencia.",
+            "Es fan de manera regular dinàmiques de cohesió i coneixement mutu, especialment a l'inici de curs i després de noves incorporacions, per a crear un clima de confiança i pertinença."],
+  "II.45": ["Se practican situaciones de comunicación habituales (pedir ayuda, expresar desacuerdo, negociar) mediante simulaciones y debates guiados, con modelos de frases útiles y reflexión posterior.",
+            "Es practiquen situacions de comunicació habituals (demanar ajuda, expressar desacord, negociar) mitjançant simulacions i debats guiats, amb models de frases útils i reflexió posterior."],
+  "II.46": ["Las normas del grupo se elaboran con el alumnado, se formulan en positivo y de manera accesible, se mantienen visibles en el aula y se revisan periódicamente.",
+            "Les normes del grup s'elaboren amb l'alumnat, es formulen en positiu i de manera accessible, es mantenen visibles a l'aula i es revisen periòdicament."],
+  "II.47": ["«Otros: espacios de recreo con actividades organizadas e inclusivas».",
+            "«Altres: espais d'esbarjo amb activitats organitzades i inclusives»."],
+
+  /* ---------- MEDIDAS DE COMPENSACIÓN DE DESIGUALDADES ---------- */
+  "II.49": ["Se hace un seguimiento semanal de la asistencia del grupo, se contacta pronto con las familias ante patrones de ausencias y, si persisten, se activa el protocolo de absentismo del centro.",
+            "Es fa un seguiment setmanal de l'assistència del grup, es contacta prompte amb les famílies davant de patrons d'absències i, si persisteixen, s'activa el protocol d'absentisme del centre."],
+  "II.50": ["Se incorporan a la rutina del grupo hábitos de higiene, descanso, alimentación y actividad física, con información accesible para las familias y seguimiento en las tutorías.",
+            "S'incorporen a la rutina del grup hàbits d'higiene, descans, alimentació i activitat física, amb informació accessible per a les famílies i seguiment en les tutories."],
+  "II.51": ["Se visibilizan y valoran en el aula las lenguas y culturas presentes en el grupo y en el entorno, y se incorporan a los contenidos referentes culturales diversos para prevenir prejuicios.",
+            "Es visibilitzen i es valoren a l'aula les llengües i cultures presents en el grup i en l'entorn, i s'incorporen als continguts referents culturals diversos per a prevenir prejudicis."],
+  "II.52": ["A lo largo del curso se programan actividades de sensibilización sobre igualdad, diversidad e inclusión, aprovechando fechas significativas y con la participación activa del alumnado.",
+            "Al llarg del curs es programen activitats de sensibilització sobre igualtat, diversitat i inclusió, aprofitant dates significatives i amb la participació activa de l'alumnat."],
+  "II.53": ["«Otros: préstamo de material escolar y de dispositivos para todo el grupo».",
+            "«Altres: préstec de material escolar i de dispositius per a tot el grup»."]
+});
+
+</script>
+<script>
+/* Ejemplos de aplicación de las medidas de NIVEL III: [castellano, valenciano].
+   Mismo criterio que ejemplos-n2.js: genéricos y aplicables en cualquier etapa.
+   Solo las medidas propias de una etapa (ESO, Bachillerato, FP, FPA, deportistas,
+   conservatorio) la mencionan porque la medida solo existe en ella. */
+window.EJEMPLOS = Object.assign(window.EJEMPLOS || {}, {
+  /* ================= MEDIDAS DE ACCESO ================= */
+  "III.9": ["Se garantiza un recorrido accesible entre la entrada, el aula y los demás espacios que usa el alumno/a, se ubica al grupo en espacios accesibles y se mantienen libres de obstáculos los pasillos del aula.",
+            "Es garanteix un recorregut accessible entre l'entrada, l'aula i la resta d'espais que usa l'alumne/a, s'ubica el grup en espais accessibles i es mantenen lliures d'obstacles els passadissos de l'aula."],
+  "III.10": ["La información que debe consultar el alumno/a (horarios, avisos, materiales, perchas o taquillas) se coloca a una altura y en una posición que le permiten alcanzarla de forma autónoma.",
+             "La informació que ha de consultar l'alumne/a (horaris, avisos, materials, penjadors o taquilles) es col·loca a una altura i en una posició que li permeten abastar-la de manera autònoma."],
+  "III.11": ["El alumno/a dispone de un aseo adaptado cercano a su aula, del tiempo que necesita para usarlo y, si lo precisa, de la supervisión acordada con la familia.",
+             "L'alumne/a disposa d'un lavabo adaptat pròxim a la seua aula, del temps que necessita per a usar-lo i, si ho necessita, de la supervisió acordada amb la família."],
+  "III.12": ["Se ajustan la mesa, la silla y los utensilios de uso común a las necesidades posturales y de manipulación del alumno/a, siguiendo el asesoramiento de los profesionales especializados.",
+             "S'ajusten la taula, la cadira i els utensilis d'ús comú a les necessitats posturals i de manipulació de l'alumne/a, seguint l'assessorament dels professionals especialitzats."],
+  "III.14": ["El alumno/a se ubica en el lugar del aula con mejor iluminación y sin reflejos, se controlan la luz natural y la artificial y se evita que tenga que mirar a contraluz.",
+             "L'alumne/a s'ubica en el lloc de l'aula amb millor il·luminació i sense reflexos, es controlen la llum natural i l'artificial i s'evita que haja de mirar a contrallum."],
+  "III.15": ["El alumno/a se sitúa cerca de las fuentes de información y recibe en formato ampliado o de alto contraste los carteles, las presentaciones y lo que se escribe en la pizarra.",
+             "L'alumne/a se situa a prop de les fonts d'informació i rep en format ampliat o d'alt contrast els cartells, les presentacions i el que s'escriu en la pissarra."],
+  "III.16": ["El profesorado verbaliza lo que escribe o muestra, nombra a quien interviene y usa señales sonoras constantes para anticipar los cambios de actividad y de espacio.",
+             "El professorat verbalitza el que escriu o mostra, anomena qui intervé i usa senyals sonors constants per a anticipar els canvis d'activitat i d'espai."],
+  "III.17": ["Se reduce el ruido ambiental del aula (protectores en el mobiliario, ubicación lejos de fuentes de ruido, normas de volumen) y se utilizan los sistemas de ayuda auditiva del alumno/a durante las explicaciones.",
+             "Es redueix el soroll ambiental de l'aula (protectors en el mobiliari, ubicació lluny de fonts de soroll, normes de volum) i s'utilitzen els sistemes d'ajuda auditiva de l'alumne/a durant les explicacions."],
+  "III.18": ["El alumno/a se sienta donde ve bien la cara de quien habla; el profesorado habla de frente, sin taparse la boca ni ponerse a contraluz, y el grupo respeta los turnos de palabra.",
+             "L'alumne/a s'asseu on veu bé la cara de qui parla; el professorat parla de cara, sense tapar-se la boca ni posar-se a contrallum, i el grup respecta els torns de paraula."],
+  "III.20": ["Los espacios que usa el alumno/a son estables y previsibles, con zonas de trabajo bien delimitadas, materiales siempre en el mismo lugar y un espacio de calma al que puede acudir cuando lo necesita.",
+             "Els espais que usa l'alumne/a són estables i previsibles, amb zones de treball ben delimitades, materials sempre al mateix lloc i un espai de calma on pot anar quan ho necessita."],
+  "III.21": ["Las dependencias y los recorridos que utiliza el alumno/a se señalizan con imágenes, pictogramas o códigos de color para que pueda orientarse y desplazarse con autonomía.",
+             "Les dependències i els recorreguts que utilitza l'alumne/a se senyalitzen amb imatges, pictogrames o codis de color perquè puga orientar-se i desplaçar-se amb autonomia."],
+  "III.22": ["El alumno/a dispone de una agenda o un horario visual; las instrucciones de las tareas se le presentan en pasos cortos con apoyo visual y los cambios de rutina se le anticipan.",
+             "L'alumne/a disposa d'una agenda o un horari visual; les instruccions de les tasques se li presenten en passos curts amb suport visual i els canvis de rutina se li anticipen."],
+  "III.23": ["Los materiales del grupo se le facilitan en el formato que necesita (digital, ampliado, en lectura fácil, con apoyos visuales o en braille), con la misma información y al mismo tiempo que al resto.",
+             "Els materials del grup se li faciliten en el format que necessita (digital, ampliat, en lectura fàcil, amb suports visuals o en braille), amb la mateixa informació i alhora que a la resta."],
+  "III.24": ["Antes de cada salida o actividad complementaria se comprueba la accesibilidad, se prevén los apoyos y el transporte necesarios y se anticipa la actividad al alumno/a para que participe en igualdad.",
+             "Abans de cada eixida o activitat complementària es comprova l'accessibilitat, es preveuen els suports i el transport necessaris i s'anticipa l'activitat a l'alumne/a perquè hi participe en igualtat."],
+  "III.26": ["El centro informa a la familia, o al alumno/a si es mayor de edad, de las becas y ayudas al estudio que le corresponden y le acompaña en la preparación de la solicitud.",
+             "El centre informa la família, o l'alumne/a si és major d'edat, de les beques i ajudes a l'estudi que li corresponen i l'acompanya en la preparació de la sol·licitud."],
+  "III.27": ["Se informa a la familia de la ayuda de comedor y se le orienta en su tramitación, también cuando su situación cambia a lo largo del curso.",
+             "S'informa la família de l'ajuda de menjador i se l'orienta en la tramitació, també quan la seua situació canvia al llarg del curs."],
+  "III.28": ["Se gestiona el transporte escolar o la ayuda correspondiente y se organizan la llegada y la salida del alumno/a para que no pierda tiempo lectivo.",
+             "Es gestiona el transport escolar o l'ajuda corresponent i s'organitzen l'arribada i l'eixida de l'alumne/a perquè no perda temps lectiu."],
+  "III.29": ["«Otros: banco de libros y préstamo de material escolar o de un dispositivo del centro».",
+             "«Altres: banc de llibres i préstec de material escolar o d'un dispositiu del centre»."],
+  "III.31": ["Ante una situación grave de convivencia, el equipo directivo solicita el asesoramiento de la Unidad de Atención e Intervención y aplica las medidas de protección e intervención acordadas.",
+             "Davant d'una situació greu de convivència, l'equip directiu sol·licita l'assessorament de la Unitat d'Atenció i Intervenció i aplica les mesures de protecció i intervenció acordades."],
+  "III.32": ["El centro ordinario y el centro de educación especial coordinan periódicamente los objetivos, las estrategias y el seguimiento del alumno/a, por ejemplo en una escolarización combinada.",
+             "El centre ordinari i el centre d'educació especial coordinen periòdicament els objectius, les estratègies i el seguiment de l'alumne/a, per exemple en una escolarització combinada."],
+  "III.33": ["Mientras el alumno/a está atendido en la unidad, el equipo docente mantiene la coordinación sobre su plan de trabajo y se planifica con antelación un retorno progresivo y acompañado al centro.",
+             "Mentre l'alumne/a és atés en la unitat, l'equip docent manté la coordinació sobre el seu pla de treball i es planifica amb antelació un retorn progressiu i acompanyat al centre."],
+  "III.34": ["Durante la hospitalización, el equipo docente acuerda con el profesorado hospitalario un plan de trabajo con los aprendizajes esenciales y se mantiene el contacto del alumno/a con su grupo.",
+             "Durant l'hospitalització, l'equip docent acorda amb el professorat hospitalari un pla de treball amb els aprenentatges essencials i es manté el contacte de l'alumne/a amb el seu grup."],
+  "III.35": ["El servicio de orientación del centro solicita al SEO asesoramiento especializado para un caso complejo y se acuerda con el equipo docente un plan de intervención con seguimiento periódico.",
+             "El servei d'orientació del centre sol·licita al SEO assessorament especialitzat per a un cas complex i s'acorda amb l'equip docent un pla d'intervenció amb seguiment periòdic."],
+  "III.36": ["«Otros: coordinación con el profesorado de atención educativa domiciliaria».",
+             "«Altres: coordinació amb el professorat d'atenció educativa domiciliària»."],
+  "III.38": ["El tutor o la tutora y el servicio de orientación se coordinan periódicamente con los servicios sociales municipales para hacer el seguimiento de la situación del alumno/a y del apoyo a la familia.",
+             "El tutor o la tutora i el servei d'orientació es coordinen periòdicament amb els serveis socials municipals per a fer el seguiment de la situació de l'alumne/a i del suport a la família."],
+  "III.39": ["El centro y el equipo especializado que interviene con la familia acuerdan indicadores de seguimiento (asistencia, cuidado, estado emocional) y una vía de comunicación periódica.",
+             "El centre i l'equip especialitzat que intervé amb la família acorden indicadors de seguiment (assistència, cura, estat emocional) i una via de comunicació periòdica."],
+  "III.40": ["Las entrevistas y comunicaciones importantes con la familia se realizan con la ayuda de una persona mediadora o intérprete, que también facilita la comprensión del funcionamiento del centro.",
+             "Les entrevistes i comunicacions importants amb la família es fan amb l'ajuda d'una persona mediadora o intèrpret, que també facilita la comprensió del funcionament del centre."],
+  "III.41": ["Con el consentimiento de la familia, el centro comparte con los servicios sanitarios la información relevante observada en el aula y se coordinan las pautas que afectan a la jornada escolar.",
+             "Amb el consentiment de la família, el centre comparteix amb els serveis sanitaris la informació rellevant observada a l'aula i es coordinen les pautes que afecten la jornada escolar."],
+  "III.42": ["El profesorado y los profesionales de atención temprana comparten objetivos y estrategias para trabajarlos de manera coherente en el centro, en casa y en las sesiones de intervención.",
+             "El professorat i els professionals d'atenció primerenca comparteixen objectius i estratègies per a treballar-los de manera coherent al centre, a casa i en les sessions d'intervenció."],
+  "III.43": ["Con autorización de la familia, el centro facilita a la unidad de salud mental la información que solicita sobre el funcionamiento del alumno/a en el aula y ajusta las pautas educativas a sus orientaciones.",
+             "Amb autorització de la família, el centre facilita a la unitat de salut mental la informació que sol·licita sobre el funcionament de l'alumne/a a l'aula i ajusta les pautes educatives a les seues orientacions."],
+  "III.44": ["Ante indicios de un uso problemático de sustancias, pantallas o juego, se orienta a la familia hacia la unidad de prevención y se coordinan con ella actuaciones preventivas en el centro.",
+             "Davant d'indicis d'un ús problemàtic de substàncies, pantalles o joc, s'orienta la família cap a la unitat de prevenció i es coordinen amb ella actuacions preventives al centre."],
+  "III.45": ["Se mantiene una coordinación regular con el equipo técnico responsable de la medida de protección y se acuerda qué información escolar se comparte, con quién y por qué vía.",
+             "Es manté una coordinació regular amb l'equip tècnic responsable de la mesura de protecció i s'acorda quina informació escolar es comparteix, amb qui i per quina via."],
+  "III.46": ["El centro se coordina con la entidad que atiende al alumno/a o a su familia para compartir objetivos y dar coherencia a los apoyos que recibe dentro y fuera del horario escolar.",
+             "El centre es coordina amb l'entitat que atén l'alumne/a o la seua família per a compartir objectius i donar coherència als suports que rep dins i fora de l'horari escolar."],
+  "III.47": ["«Otros: coordinación con el servicio privado de logopedia o psicopedagogía al que asiste».",
+             "«Altres: coordinació amb el servei privat de logopèdia o psicopedagogia on va»."],
+
+  /* ============ MEDIDAS PERSONALIZADAS PARA LA PARTICIPACIÓN ============ */
+  "III.49": ["El tutor o la tutora mantiene con el alumno/a una entrevista breve y periódica para revisar su organización, sus avances y su bienestar, y acordar objetivos concretos hasta la siguiente sesión.",
+             "El tutor o la tutora manté amb l'alumne/a una entrevista breu i periòdica per a revisar la seua organització, els seus avanços i el seu benestar, i acordar objectius concrets fins a la sessió següent."],
+  "III.50": ["Un compañero/a formado para ello acompaña al alumno/a en momentos o tareas acordados (organización, trabajo en el aula, recreo) y el tutor o la tutora revisa periódicamente cómo funciona.",
+             "Un company/a format per a fer-ho acompanya l'alumne/a en moments o tasques acordats (organització, treball a l'aula, esbarjo) i el tutor o la tutora revisa periòdicament com funciona."],
+  "III.51": ["Familia, tutor/a y alumno/a firman un compromiso con pocos objetivos concretos y observables, lo que hará cada parte y la forma y la frecuencia del seguimiento.",
+             "Família, tutor/a i alumne/a signen un compromís amb pocs objectius concrets i observables, el que farà cada part i la manera i la freqüència del seguiment."],
+  "III.52": ["El alumno/a participa, individualmente o en pequeño grupo, en sesiones periódicas para identificar y regular sus emociones y practicar habilidades sociales, con pautas que se trasladan al aula y a la familia.",
+             "L'alumne/a participa, individualment o en grup reduït, en sessions periòdiques per a identificar i regular les seues emocions i practicar habilitats socials, amb pautes que es traslladen a l'aula i a la família."],
+  "III.53": ["Una persona adulta de referencia acompaña al alumno/a en los momentos que le resultan más difíciles (entradas, cambios de actividad, recreos, conflictos) y le ayuda a anticipar y organizar la jornada.",
+             "Una persona adulta de referència acompanya l'alumne/a en els moments que li resulten més difícils (entrades, canvis d'activitat, esbarjos, conflictes) i l'ajuda a anticipar i organitzar la jornada."],
+  "III.54": ["A su llegada se realizan la entrevista con la familia, la visita al centro, la evaluación inicial y la asignación de un compañero/a de acogida, y se revisa su adaptación durante las primeras semanas.",
+             "A la seua arribada es fan l'entrevista amb la família, la visita al centre, l'avaluació inicial i l'assignació d'un company/a d'acollida, i es revisa la seua adaptació durant les primeres setmanes."],
+  "III.55": ["Se activa el protocolo de acoso: se protege a la víctima con medidas de vigilancia y una persona de referencia, se interviene con quien agrede y con el grupo, y se informa a las familias.",
+             "S'activa el protocol d'assetjament: es protegeix la víctima amb mesures de vigilància i una persona de referència, s'intervé amb qui agredeix i amb el grup, i s'informa les famílies."],
+  "III.56": ["Ante indicios de maltrato se cumplimenta la hoja de notificación, se comunica a los servicios correspondientes y se ofrece al alumno/a un espacio seguro y una persona de referencia en el centro.",
+             "Davant d'indicis de maltractament s'emplena el full de notificació, es comunica als serveis corresponents i s'ofereix a l'alumne/a un espai segur i una persona de referència al centre."],
+  "III.57": ["Se aplica el protocolo correspondiente, el centro se coordina con los servicios especializados, se garantiza la confidencialidad y se ofrece acompañamiento al alumno/a; si es necesario, se interviene con quien ejerce la violencia.",
+             "S'aplica el protocol corresponent, el centre es coordina amb els serveis especialitzats, es garanteix la confidencialitat i s'ofereix acompanyament a l'alumne/a; si cal, s'intervé amb qui exerceix la violència."],
+  "III.58": ["Ante cualquier otra situación de violencia o discriminación se aplica el protocolo vigente, se protege al alumno/a afectado, se interviene con las personas implicadas y se trabaja el respeto con el grupo.",
+             "Davant de qualsevol altra situació de violència o discriminació s'aplica el protocol vigent, es protegeix l'alumne/a afectat, s'intervé amb les persones implicades i es treballa el respecte amb el grup."],
+  "III.59": ["«Otros: orientación académica y profesional personalizada».",
+             "«Altres: orientació acadèmica i professional personalitzada»."],
+
+  /* ================= MEDIDAS DE FLEXIBILIZACIÓN ================= */
+  "III.61": ["La permanencia se acompaña de un plan específico que parte del análisis de las dificultades del curso anterior, concreta los apoyos y prevé revisiones periódicas con el alumno/a y la familia.",
+             "La permanència s'acompanya d'un pla específic que parteix de l'anàlisi de les dificultats del curs anterior, concreta els suports i preveu revisions periòdiques amb l'alumne/a i la família."],
+
+  /* ================= MEDIDAS DE APRENDIZAJE ================= */
+  "III.64": ["El alumno/a puede presentar el producto final en otro formato (oral, visual, digital o manipulativo) o con otra extensión, siempre que muestre los aprendizajes esenciales del proyecto.",
+             "L'alumne/a pot presentar el producte final en un altre format (oral, visual, digital o manipulatiu) o amb una altra extensió, sempre que mostre els aprenentatges essencials del projecte."],
+  "III.65": ["Se le ubica cerca del docente, se le dan las instrucciones de una en una comprobando que las ha entendido, se le ofrece modelado y práctica guiada y se refuerzan sus logros de forma inmediata.",
+             "Se l'ubica a prop del docent, se li donen les instruccions d'una en una comprovant que les ha enteses, se li ofereix modelatge i pràctica guiada i se'n reforcen els èxits de manera immediata."],
+  "III.66": ["Las actividades se ajustan en cantidad, complejidad o tiempo, priorizando las que trabajan los aprendizajes esenciales, y se le permiten distintas formas de respuesta.",
+             "Les activitats s'ajusten en quantitat, complexitat o temps, prioritzant les que treballen els aprenentatges essencials, i se li permeten diferents formes de resposta."],
+  "III.67": ["Dispone de materiales de apoyo personalizados (esquemas, glosarios visuales, guías de pasos, versiones simplificadas o material manipulativo) para seguir la programación común.",
+             "Disposa de materials de suport personalitzats (esquemes, glossaris visuals, guies de passos, versions simplificades o material manipulatiu) per a seguir la programació comuna."],
+  "III.68": ["En las pruebas se adaptan el formato y las condiciones: enunciados claros y separados, lectura en voz alta de las preguntas, más tiempo, un espacio tranquilo o la posibilidad de responder oralmente.",
+             "En les proves s'adapten el format i les condicions: enunciats clars i separats, lectura en veu alta de les preguntes, més temps, un espai tranquil o la possibilitat de respondre oralment."],
+  "III.69": ["En las salidas y celebraciones se le anticipa lo que va a ocurrir, se le asigna un papel que puede desempeñar con éxito y se prevé el apoyo que necesitará.",
+             "En les eixides i celebracions se li anticipa el que passarà, se li assigna un paper que pot exercir amb èxit i es preveu el suport que necessitarà."],
+  "III.71": ["En ESO, el alumno/a cursa una materia de libre configuración orientada al refuerzo de las competencias en las que presenta más dificultades, en lugar de otra optativa.",
+             "En ESO, l'alumne/a cursa una matèria de lliure configuració orientada al reforç de les competències en què presenta més dificultats, en lloc d'una altra optativa."],
+  "III.72": ["El alumno/a participa en sesiones periódicas en pequeño grupo centradas en la comprensión y la expresión oral en la lengua extranjera, con situaciones comunicativas funcionales.",
+             "L'alumne/a participa en sessions periòdiques en grup reduït centrades en la comprensió i l'expressió oral en la llengua estrangera, amb situacions comunicatives funcionals."],
+  "III.73": ["Cuando el grupo se desdobla, el alumno/a se integra en el subgrupo que trabaja los mismos aprendizajes con más apoyos y una atención más individualizada.",
+             "Quan el grup es desdobla, l'alumne/a s'integra en el subgrup que treballa els mateixos aprenentatges amb més suports i una atenció més individualitzada."],
+  "III.74": ["En las sesiones acordadas, un segundo docente apoya al alumno/a dentro de su aula, sin separarlo del grupo, para que pueda seguir la actividad común.",
+             "En les sessions acordades, un segon docent dona suport a l'alumne/a dins de la seua aula, sense separar-lo del grup, perquè puga seguir l'activitat comuna."],
+  "III.75": ["Durante un periodo limitado, el alumno/a asiste en horario lectivo a un pequeño grupo de refuerzo con objetivos concretos, y al final de cada periodo se revisa si continúa.",
+             "Durant un període limitat, l'alumne/a assisteix en horari lectiu a un grup reduït de reforç amb objectius concrets, i al final de cada període es revisa si hi continua."],
+  "III.76": ["El alumno/a sigue un plan de recuperación de las materias pendientes con actividades secuenciadas, entregas periódicas y un docente de referencia que le orienta.",
+             "L'alumne/a segueix un pla de recuperació de les matèries pendents amb activitats seqüenciades, lliuraments periòdics i un docent de referència que l'orienta."],
+  "III.77": ["El alumno/a participa fuera del horario lectivo en el programa de refuerzo cofinanciado del centro, y su profesorado se coordina con el del programa sobre los aprendizajes que conviene reforzar.",
+             "L'alumne/a participa fora de l'horari lectiu en el programa de reforç cofinançat del centre, i el seu professorat es coordina amb el del programa sobre els aprenentatges que convé reforçar."],
+  "III.78": ["El alumno/a participa en un taller en pequeño grupo en el que se refuerzan aprendizajes básicos mediante tareas prácticas y funcionales.",
+             "L'alumne/a participa en un taller en grup reduït en què es reforcen aprenentatges bàsics mitjançant tasques pràctiques i funcionals."],
+  "III.79": ["El alumno/a participa en un taller de ampliación en el que profundiza en sus áreas de interés mediante retos e investigaciones, y comparte el resultado con su grupo.",
+             "L'alumne/a participa en un taller d'ampliació en què aprofundeix en les seues àrees d'interés mitjançant reptes i investigacions, i comparteix el resultat amb el seu grup."],
+  "III.80": ["«Otros: programa de entrenamiento de funciones ejecutivas en pequeño grupo».",
+             "«Altres: programa d'entrenament de funcions executives en grup reduït»."],
+  "III.82": ["El alumno/a que conoce el castellano pero no el valenciano recibe sesiones intensivas de valenciano, centradas primero en la comunicación oral y el vocabulario escolar, durante el tiempo necesario para seguir las clases.",
+             "L'alumne/a que coneix el castellà però no el valencià rep sessions intensives de valencià, centrades primer en la comunicació oral i el vocabulari escolar, durant el temps necessari per a seguir les classes."],
+  "III.83": ["El alumno/a que no conoce ninguna de las lenguas oficiales recibe atención lingüística intensiva y se incorpora progresivamente a las actividades de su grupo, empezando por las de menor carga lingüística.",
+             "L'alumne/a que no coneix cap de les llengües oficials rep atenció lingüística intensiva i s'incorpora progressivament a les activitats del seu grup, començant per les de menys càrrega lingüística."],
+  "III.85": ["El alumno/a tiene prioridad para elegir el turno u horario que le permite compatibilizar los estudios con los entrenamientos.",
+             "L'alumne/a té prioritat per a triar el torn o l'horari que li permet compatibilitzar els estudis amb els entrenaments."],
+  "III.86": ["Se asigna al alumno/a al grupo cuyo horario facilita su asistencia a entrenamientos y competiciones.",
+             "S'assigna l'alumne/a al grup l'horari del qual facilita la seua assistència a entrenaments i competicions."],
+  "III.87": ["Las ausencias por entrenamientos y competiciones se justifican con la documentación oficial y el alumno/a recibe un plan para recuperar los aprendizajes de esos días.",
+             "Les absències per entrenaments i competicions es justifiquen amb la documentació oficial i l'alumne/a rep un pla per a recuperar els aprenentatges d'aquells dies."],
+  "III.88": ["Las pruebas que coinciden con competiciones oficiales se realizan en otra fecha acordada con el alumno/a.",
+             "Les proves que coincideixen amb competicions oficials es fan en una altra data acordada amb l'alumne/a."],
+  "III.89": ["En los centros autorizados, el alumno/a se escolariza en un grupo específico con horario adaptado a la práctica deportiva.",
+             "En els centres autoritzats, l'alumne/a s'escolaritza en un grup específic amb horari adaptat a la pràctica esportiva."],
+  "III.90": ["«Otros: entrega de materiales y tareas por la plataforma durante las concentraciones».",
+             "«Altres: lliurament de materials i tasques per la plataforma durant les concentracions»."],
+  "III.92": ["El centro se coordina con el conservatorio para ajustar el horario del alumno/a y tramita las convalidaciones o exenciones de materias que le corresponden.",
+             "El centre es coordina amb el conservatori per a ajustar l'horari de l'alumne/a i tramita les convalidacions o exempcions de matèries que li corresponen."],
+  "III.93": ["El alumno/a se matricula solo de una parte de las materias del Bachillerato para compatibilizarlo con sus enseñanzas profesionales, y completa el resto en cursos posteriores.",
+             "L'alumne/a es matricula només d'una part de les matèries del Batxillerat per a compatibilitzar-lo amb els seus ensenyaments professionals, i completa la resta en cursos posteriors."],
+  "III.94": ["«Otros: flexibilización de la entrega de tareas en periodos de audiciones o actuaciones».",
+             "«Altres: flexibilització del lliurament de tasques en períodes d'audicions o actuacions»."],
+  "III.95": ["Se diseña con la persona un itinerario que tiene en cuenta su situación laboral y familiar y su ritmo, distribuyendo los módulos en el tiempo y combinando presencialidad y seguimiento a distancia.",
+             "Es dissenya amb la persona un itinerari que té en compte la seua situació laboral i familiar i el seu ritme, distribuint els mòduls en el temps i combinant presencialitat i seguiment a distància."],
+  "III.96": ["Se diseña un itinerario personalizado del ciclo (matrícula parcial, distribución de los módulos en más cursos o adaptaciones en la formación en empresa) para que el alumno/a pueda completarlo.",
+             "Es dissenya un itinerari personalitzat del cicle (matrícula parcial, distribució dels mòduls en més cursos o adaptacions en la formació en empresa) perquè l'alumne/a el puga completar."],
+  "III.97": ["«Otros: preparación de pruebas de acceso o de obtención de titulaciones».",
+             "«Altres: preparació de proves d'accés o d'obtenció de titulacions»."],
+
+  /* ======= MEDIDAS PERSONALIZADAS PARA LA COMPENSACIÓN DE DESIGUALDADES ======= */
+  "III.99": ["Se planifican actuaciones con el grupo que valoran la lengua, la cultura y la experiencia del alumno/a y favorecen su participación, y se previenen comentarios o actitudes discriminatorias.",
+             "Es planifiquen actuacions amb el grup que valoren la llengua, la cultura i l'experiència de l'alumne/a i afavoreixen la seua participació, i es prevenen comentaris o actituds discriminatòries."],
+  "III.101": ["Se establece con el alumno/a una rutina diaria de higiene, alimentación y autonomía personal en el centro, con el material necesario disponible y un registro de logros compartido con la familia.",
+              "S'estableix amb l'alumne/a una rutina diària d'higiene, alimentació i autonomia personal al centre, amb el material necessari disponible i un registre d'assoliments compartit amb la família."],
+  "III.102": ["Ante indicadores de posible desprotección, el tutor o la tutora y el equipo directivo cumplimentan la hoja de notificación y la envían a los servicios sociales, y el centro mantiene el seguimiento del alumno/a.",
+              "Davant d'indicadors de possible desprotecció, el tutor o la tutora i l'equip directiu emplenen el full de notificació i l'envien als serveis socials, i el centre manté el seguiment de l'alumne/a."],
+  "III.103": ["Se acuerda con la familia acogedora o con el centro de protección quién recoge al alumno/a, firma las autorizaciones y recibe la información, y se cuidan las actividades que hacen referencia a la historia familiar.",
+              "S'acorda amb la família acollidora o amb el centre de protecció qui recull l'alumne/a, signa les autoritzacions i rep la informació, i es cuiden les activitats que fan referència a la història familiar."],
+  "III.104": ["Ante faltas reiteradas se cita a la familia, se acuerda un compromiso de asistencia con seguimiento semanal y, si no mejora, se deriva el caso a la comisión municipal de absentismo.",
+              "Davant de faltes reiterades es cita la família, s'acorda un compromís d'assistència amb seguiment setmanal i, si no millora, es deriva el cas a la comissió municipal d'absentisme."],
+  "III.105": ["El servicio de orientación realiza entrevistas personalizadas con el alumno/a y su familia, explora sus intereses y le informa de los itinerarios y programas que le permiten continuar su formación.",
+              "El servei d'orientació fa entrevistes personalitzades amb l'alumne/a i la seua família, n'explora els interessos i l'informa dels itineraris i programes que li permeten continuar la seua formació."]
 });
 
 </script>
@@ -1733,6 +1792,35 @@ window.TEXTOS = Object.assign(window.TEXTOS || {}, {
     otros: {es: "Otras situaciones", va: "Altres situacions"}
   };
 })();
+
+</script>
+<script>
+/* Calendario escolar oficial de la Comunitat Valenciana, para los accesos rápidos
+   de fecha de inicio (inicio de curso, 2.º y 3.er trimestre).
+
+   2026-2027: Resolución de 15 de junio de 2026, de la Dirección General de Centros
+   Docentes, por la que se fija el calendario escolar del curso académico 2026-2027
+   en la Comunitat Valenciana (DOGV, signatura 2026/20810).
+   - Inicio de las clases: 9/9/2026 en Infantil, Primaria, ESO, Bachillerato y FP;
+     14/9/2026 en Formación de Personas Adultas (y FP de cualificación básica /
+     segunda oportunidad).
+   - Vacaciones de Navidad: del 22/12/2026 al 6/1/2027, ambos inclusive.
+   - Vacaciones de Pascua: del 25/3/2027 al 5/4/2027, ambos inclusive.
+   La resolución no define trimestres: se toma como inicio del 2.º y del 3.er trimestre
+   el primer día lectivo tras las vacaciones de Navidad y de Pascua.
+
+   Para un curso nuevo, añade una entrada con la misma forma (clave "AAAA-AAAA"). */
+window.CALENDARIO = {
+  "2026-2027": {
+    fuente: {
+      es: "Resolución de 15 de junio de 2026 de la Dirección General de Centros Docentes (calendario escolar 2026-2027)",
+      va: "Resolució de 15 de juny de 2026 de la Direcció General de Centres Docents (calendari escolar 2026-2027)"
+    },
+    inicio: {def: "2026-09-09", FPA: "2026-09-14"},
+    t2: "2027-01-07",
+    t3: "2027-04-06"
+  }
+};
 
 </script>
 <script>
@@ -2197,7 +2285,7 @@ window.PDFGEN = (function () {
         const id = niv + "." + f.r, t = T[id] || {};
         const es = f.d || f.c;
         const n = {id, tipo: f.tipo, nivel: niv, r: f.r, bloque: bloque.key, num: f.num, c: f.c, d: f.d,
-          es, va: t.va || es, x: t.x || null, e: t.e || null, et: t.et || null, otros: /^otros\b/i.test(es)};
+          es, va: t.va || es, x: t.x || null, e: (window.EJEMPLOS || {})[id] || t.e || null, et: t.et || null, otros: /^otros\b/i.test(es)};
         if (t.va) dicc[es] = t.va;
         const partes = String(f.num || "").split(".").filter(Boolean), pref = [];
         for (let i = 1; i < partes.length; i++) pref.push(partes.slice(0, i).join("."));
@@ -2346,6 +2434,7 @@ window.PDFGEN = (function () {
   function render() {
     renderPasos();
     [renderAlumno, () => renderLista("II"), () => renderLista("III"), renderDetalles, renderExportar][S.paso]();
+    vista.insertAdjacentHTML("beforeend", pie());
     $("#bAnt").disabled = S.paso === 0;
     $("#bSig").style.visibility = S.paso === 4 ? "hidden" : "visible";
     $("#bSig span").textContent = S.paso === 3 ? t("irExportar") : t("siguiente");
@@ -2395,8 +2484,7 @@ window.PDFGEN = (function () {
         }).join("")}
         <div class="sugbar" id="sugbar" hidden></div>
         <p class="fuente">${esc(t("perfilesFuente"))} * ${esc(t("perfilPropio"))}.</p>
-      </section>
-      ${pie()}`;
+      </section>`;
     pintarSugbar();
   }
 
@@ -2519,6 +2607,7 @@ window.PDFGEN = (function () {
       vista.innerHTML = html + `<div class="card vacio">${esc(t("ningunaElegida"))}</div>`;
       return;
     }
+    html += notaCalendario();
     for (const niv of NIVELES) {
       for (const b of M.niveles[niv]) {
         const its = b.nodos.filter(n => n.tipo === "item" && S.sel[n.id]);
@@ -2541,7 +2630,7 @@ window.PDFGEN = (function () {
       </header>
       <div class="grid">
         ${n.otros ? `<label class="f full">${esc(t("phOtros"))}<input type="text" data-f="otros" value="${esc(s.otros)}"><span class="hint warn" data-w="otros" hidden>${esc(t("wOtros"))}</span></label>` : ""}
-        <label class="f">${esc(t("fFi"))}<input type="date" data-f="fi" value="${esc(s.fi)}" min="2000-01-01" max="2100-12-31"></label>
+        <div class="f-fi"><label class="f">${esc(t("fFi"))}<input type="date" data-f="fi" value="${esc(s.fi)}" min="2000-01-01" max="2100-12-31"></label>${atajosInicio(s)}</div>
         <div class="f-ff"><label class="f">${esc(t("fFf"))}<input type="date" data-f="ff" value="${esc(s.ff)}" min="2000-01-01" max="2100-12-31"${s.sinFin ? " disabled" : ""}></label>
           <label class="chk"><input type="checkbox" data-f="sinFin"${s.sinFin ? " checked" : ""}>${esc(t("sinFin"))}</label></div>
         <label class="f val">${esc(t("fVal"))}<select data-f="val">
@@ -2556,9 +2645,37 @@ window.PDFGEN = (function () {
     </article>`;
   }
 
+  /* Accesos rápidos de fecha de inicio según el calendario escolar oficial del curso indicado. */
+  const fmtF = iso => iso.split("-").reverse().join("/");
+  function calendario() {
+    const m = String(S.alumno.cursoEsc || "").match(/(20\d{2})\s*[-/–]\s*(\d{2,4})/);
+    if (!m) return null;
+    const y1 = +m[1], y2 = +m[2] < 100 ? 2000 + +m[2] : +m[2];
+    const c = y2 === y1 + 1 ? (window.CALENDARIO || {})[`${y1}-${y2}`] : null;
+    if (!c) return null;
+    const et = etapaActual();
+    return {c, et, ini: (et && c.inicio[et]) || c.inicio.def};
+  }
+  function atajosInicio(s) {
+    const cal = calendario();
+    if (!cal) return "";
+    const ops = [["atIni", "atTitIni", cal.ini], ["atT2", "atTitT2", cal.c.t2], ["atT3", "atTitT3", cal.c.t3]];
+    return `<div class="atajos" role="group" aria-label="${esc(t("atAria"))}">${ops.map(([k, tt, f]) =>
+      `<button type="button" class="atajo" data-act="atajo" data-fecha="${f}" aria-pressed="${s.fi === f}" title="${esc(t(tt) + " · " + fmtF(f))}">${esc(t(k))} <span class="fch">${fmtF(f).slice(0, 5)}</span></button>`).join("")}</div>`;
+  }
+  function notaCalendario() {
+    const cal = calendario();
+    if (cal) {
+      const extra = cal.et !== "FPA" && cal.c.inicio.FPA ? t("calFpa", fmtF(cal.c.inicio.FPA)) : "";
+      return `<p class="hint cal">${esc(t("calNota", cal.c.fuente[P.lang], fmtF(cal.ini), fmtF(cal.c.t2), fmtF(cal.c.t3), extra))}</p>`;
+    }
+    return S.alumno.cursoEsc.trim() ? `<p class="hint cal">${esc(t("calNoDisp", S.alumno.cursoEsc.trim()))}</p>` : "";
+  }
+
   function avisos(card) {
     const s = S.sel[card.dataset.id];
     if (!s) return;
+    $$(".atajo", card).forEach(b => b.setAttribute("aria-pressed", String(b.dataset.fecha === s.fi)));
     const wf = $("[data-w=fechas]", card), wo = $("[data-w=otros]", card);
     if (wf) wf.hidden = !(s.fi && s.ff && s.ff < s.fi);
     if (wo) wo.hidden = !!s.otros.trim();
@@ -2664,11 +2781,13 @@ window.PDFGEN = (function () {
           </div>
           <p class="privacidad">${esc(t("rgpd"))}</p>
         </div>
-      </div>
-      ${pie()}`;
+      </div>`;
   }
 
-  const pie = () => `<footer class="pie">${esc(t("pie"))} · <a href="https://github.com/pjlledo/mesures" target="_blank" rel="noopener">GitHub</a> · EUPL-1.2</footer>`;
+  const pie = () => `<footer class="pie"><p>${esc(t("pie"))}</p>
+    <p>© 2026 Pedro J. Lledó Sigüenza · ${esc(t("lic"))} <a href="https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12" target="_blank" rel="noopener">EUPL-1.2</a>
+    · <a href="https://github.com/pjlledo/mesures" target="_blank" rel="noopener">${esc(t("codigo"))}</a>
+    · <a href="https://orienteca.es/" target="_blank" rel="noopener">orienteca.es</a></p></footer>`;
 
   function nombreArchivo(ext) {
     const slug = s => norm(s).replace(/[^a-z0-9]+/g, "_").replace(/^_+|_+$/g, "");
@@ -2828,8 +2947,16 @@ window.PDFGEN = (function () {
         seleccionar(id, false); renderPasos();
         holder.remove();
         $$(".det-bloque").forEach(s => { if (!$(".medida", s)) s.remove(); });
-        if (!ordenados().length) renderDetalles();
+        if (!ordenados().length) render();
         toast(etq(M.byId[id]), t("deshacer"), () => { seleccionar(id, true); render(); });
+        return;
+      }
+      case "atajo": {
+        const inp = $("[data-f=fi]", holder);
+        inp.value = a.dataset.fecha;
+        fechaCambiada(id, "fi", inp.value);
+        flushFecha();   // se copia al momento a las demás medidas, como al escribirla
+        avisos(holder);
         return;
       }
       case "ejemplo": {
