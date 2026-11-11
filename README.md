@@ -2,7 +2,7 @@
 
 **Diseño de las medidas de respuesta educativa para la inclusión de nivel II y III (ITACA 3) de un alumno o alumna, en castellano o valenciano.**
 
-👉 **Abrir la aplicación: https://pjlledo.github.io/mesures/**
+👉 **Abrir la aplicación: https://mesures.orienteca.es/**
 
 Se eligen las medidas de la lista de ITACA 3, se completan sus fechas, descripción, valoración y resultados, y se descargan un **Excel** con la plantilla de registro (hojas Alumno, Nivel II, Nivel III y Resumen) y un **PDF** con las medidas elegidas.
 
