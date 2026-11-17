@@ -1,0 +1,8 @@
+# Solo se suben a GitHub los archivos que publica GitHub Pages.
+# El código fuente (src/, build.py, vendor/, plantilla/, fonts/) se queda en local.
+/*
+!/.gitignore
+!/index.html
+!/README.md
+!/LICENSE
+!/CNAME
